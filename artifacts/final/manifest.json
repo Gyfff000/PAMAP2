@@ -1,0 +1,37 @@
+{
+  "model": "rf_all",
+  "trained_on_subjects": [
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108
+  ],
+  "training_windows": 7410,
+  "selected_epochs": null,
+  "selection_rule": "Highest pooled LOSO macro-F1 among four prespecified main models.",
+  "evaluation_warning": "Refitted on all eight subjects for demonstration/deployment. No new independent test score is claimed.",
+  "fit_seconds": 2.411204700008966,
+  "label_names": [
+    "lying",
+    "sitting",
+    "standing",
+    "walking",
+    "running",
+    "cycling",
+    "Nordic walking",
+    "ascending stairs",
+    "descending stairs",
+    "vacuum cleaning",
+    "ironing",
+    "rope jumping"
+  ],
+  "config_sha256": "0370357cf236fbee4e5a9117362eab5332ae17330f92e833b7a9a5cf45ec0dae",
+  "data_audit_sha256": "30947305e5c3195d72d72639037a8790dc7976f72663c459be8e4b182dd095f3",
+  "files": {
+    "model.joblib": "e36574183de7fec907e4a9f5dbe13b5c45a41f3d429828628751d7ea94df4796"
+  }
+}

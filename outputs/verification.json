@@ -1,0 +1,499 @@
+{
+  "unit_tests_passed": true,
+  "unit_test_log": "test_features_are_sensor_local (test_protocol.ProtocolTests.test_features_are_sensor_local) ... ok\ntest_group_isolation (test_protocol.ProtocolTests.test_group_isolation) ... ok\ntest_long_gap_is_excluded (test_protocol.ProtocolTests.test_long_gap_is_excluded) ... ok\ntest_network_shapes_and_gradients (test_protocol.ProtocolTests.test_network_shapes_and_gradients) ... ok\ntest_normalization_uses_training_only (test_protocol.ProtocolTests.test_normalization_uses_training_only) ... ok\ntest_original_column_mapping (test_protocol.ProtocolTests.test_original_column_mapping) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 0.152s\n\nOK\n",
+  "saved_outer_models_verified": 80,
+  "model_replays": [
+    {
+      "model": "logistic",
+      "test_subject": 101,
+      "windows": 956,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "logistic",
+      "test_subject": 102,
+      "windows": 1008,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "logistic",
+      "test_subject": 103,
+      "windows": 667,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "logistic",
+      "test_subject": 104,
+      "windows": 886,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "logistic",
+      "test_subject": 105,
+      "windows": 1044,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "logistic",
+      "test_subject": 106,
+      "windows": 957,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "logistic",
+      "test_subject": 107,
+      "windows": 890,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "logistic",
+      "test_subject": 108,
+      "windows": 1002,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_all",
+      "test_subject": 101,
+      "windows": 956,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_all",
+      "test_subject": 102,
+      "windows": 1008,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_all",
+      "test_subject": 103,
+      "windows": 667,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_all",
+      "test_subject": 104,
+      "windows": 886,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_all",
+      "test_subject": 105,
+      "windows": 1044,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_all",
+      "test_subject": 106,
+      "windows": 957,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_all",
+      "test_subject": 107,
+      "windows": 890,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_all",
+      "test_subject": 108,
+      "windows": 1002,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_wrist",
+      "test_subject": 101,
+      "windows": 956,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_wrist",
+      "test_subject": 102,
+      "windows": 1008,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_wrist",
+      "test_subject": 103,
+      "windows": 667,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_wrist",
+      "test_subject": 104,
+      "windows": 886,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_wrist",
+      "test_subject": 105,
+      "windows": 1044,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_wrist",
+      "test_subject": 106,
+      "windows": 957,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_wrist",
+      "test_subject": 107,
+      "windows": 890,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_wrist",
+      "test_subject": 108,
+      "windows": 1002,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_chest",
+      "test_subject": 101,
+      "windows": 956,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_chest",
+      "test_subject": 102,
+      "windows": 1008,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_chest",
+      "test_subject": 103,
+      "windows": 667,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_chest",
+      "test_subject": 104,
+      "windows": 886,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_chest",
+      "test_subject": 105,
+      "windows": 1044,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_chest",
+      "test_subject": 106,
+      "windows": 957,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_chest",
+      "test_subject": 107,
+      "windows": 890,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_chest",
+      "test_subject": 108,
+      "windows": 1002,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_ankle",
+      "test_subject": 101,
+      "windows": 956,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_ankle",
+      "test_subject": 102,
+      "windows": 1008,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_ankle",
+      "test_subject": 103,
+      "windows": 667,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_ankle",
+      "test_subject": 104,
+      "windows": 886,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_ankle",
+      "test_subject": 105,
+      "windows": 1044,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_ankle",
+      "test_subject": 106,
+      "windows": 957,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_ankle",
+      "test_subject": 107,
+      "windows": 890,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_ankle",
+      "test_subject": 108,
+      "windows": 1002,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_no_wrist",
+      "test_subject": 101,
+      "windows": 956,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_no_wrist",
+      "test_subject": 102,
+      "windows": 1008,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_no_wrist",
+      "test_subject": 103,
+      "windows": 667,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_no_wrist",
+      "test_subject": 104,
+      "windows": 886,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_no_wrist",
+      "test_subject": 105,
+      "windows": 1044,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_no_wrist",
+      "test_subject": 106,
+      "windows": 957,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_no_wrist",
+      "test_subject": 107,
+      "windows": 890,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_no_wrist",
+      "test_subject": 108,
+      "windows": 1002,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_no_chest",
+      "test_subject": 101,
+      "windows": 956,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_no_chest",
+      "test_subject": 102,
+      "windows": 1008,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_no_chest",
+      "test_subject": 103,
+      "windows": 667,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_no_chest",
+      "test_subject": 104,
+      "windows": 886,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_no_chest",
+      "test_subject": 105,
+      "windows": 1044,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_no_chest",
+      "test_subject": 106,
+      "windows": 957,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_no_chest",
+      "test_subject": 107,
+      "windows": 890,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_no_chest",
+      "test_subject": 108,
+      "windows": 1002,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_no_ankle",
+      "test_subject": 101,
+      "windows": 956,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_no_ankle",
+      "test_subject": 102,
+      "windows": 1008,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_no_ankle",
+      "test_subject": 103,
+      "windows": 667,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_no_ankle",
+      "test_subject": 104,
+      "windows": 886,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_no_ankle",
+      "test_subject": 105,
+      "windows": 1044,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_no_ankle",
+      "test_subject": 106,
+      "windows": 957,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_no_ankle",
+      "test_subject": 107,
+      "windows": 890,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "rf_no_ankle",
+      "test_subject": 108,
+      "windows": 1002,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "cnn",
+      "test_subject": 101,
+      "windows": 956,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "cnn",
+      "test_subject": 102,
+      "windows": 1008,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "cnn",
+      "test_subject": 103,
+      "windows": 667,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "cnn",
+      "test_subject": 104,
+      "windows": 886,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "cnn",
+      "test_subject": 105,
+      "windows": 1044,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "cnn",
+      "test_subject": 106,
+      "windows": 957,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "cnn",
+      "test_subject": 107,
+      "windows": 890,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "cnn",
+      "test_subject": 108,
+      "windows": 1002,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "fusion",
+      "test_subject": 101,
+      "windows": 956,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "fusion",
+      "test_subject": 102,
+      "windows": 1008,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "fusion",
+      "test_subject": 103,
+      "windows": 667,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "fusion",
+      "test_subject": 104,
+      "windows": 886,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "fusion",
+      "test_subject": 105,
+      "windows": 1044,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "fusion",
+      "test_subject": 106,
+      "windows": 957,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "fusion",
+      "test_subject": 107,
+      "windows": 890,
+      "exact_prediction_match": true
+    },
+    {
+      "model": "fusion",
+      "test_subject": 108,
+      "windows": 1002,
+      "exact_prediction_match": true
+    }
+  ],
+  "source_hashes": {
+    "src/pamap2/__init__.py": "29bfbf66400523cdb6df83b07da04c793b19bf1fb6d929f07ee8c77effce0959",
+    "src/pamap2/analyze.py": "01eccdf541c165bb6b7f2932680ab5d13426f4170105dd7427aa6b6c5286cd4f",
+    "src/pamap2/common.py": "9b8346c7009fdc78e88a32a55c3dba2b16914a85b552712fcd445752e30c0768",
+    "src/pamap2/deployment.py": "da75416394947c21e256a2d249953eadb19ebfdee5dbdede812cf43a4fb2ac2b",
+    "src/pamap2/download.py": "c850e9952e049f534464532a0bc2b42dda0f258b44b85dba9cb5f817bd548e4e",
+    "src/pamap2/experiment.py": "7190ae193615bc2f55906c3ca27b4722dea8a96ef5d2cba04b9d9d2fdfc85dea",
+    "src/pamap2/models.py": "9f1b1902dc1d33107521103417a173b0f169d0f9fa62fd622eda00f19609a98d",
+    "src/pamap2/prepare.py": "0c8f0f6b5d42f46dcd320e3b08c8a9155dd80123f28aa7c6b09c4732cdca7267"
+  },
+  "config_sha256": "0370357cf236fbee4e5a9117362eab5332ae17330f92e833b7a9a5cf45ec0dae",
+  "paper_pdf_sha256": "5b1b534d53f8c8ef789b65b75cee79ef928c8b1a93cec1886a7213f89b4ceb5b"
+}

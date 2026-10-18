@@ -1,0 +1,55 @@
+{
+  "url": "https://archive.ics.uci.edu/static/public/231/pamap2+physical+activity+monitoring.zip",
+  "retrieved_utc": "2026-10-18T11:58:48Z",
+  "archive_sha256": "76b3580bd5a804121f507717cb498c66a312ef5c774f4a78ac470e6558add352",
+  "archive_bytes": 688226940,
+  "dataset_doi": "10.24432/C5NW2H",
+  "license": "CC BY 4.0",
+  "protocol_files": [
+    {
+      "name": "subject101.dat",
+      "sha256": "80b3fffd089c236ae88098df3b906b8d3c67a858023fe4f75045d78612147266",
+      "bytes": 141698539
+    },
+    {
+      "name": "subject102.dat",
+      "sha256": "468f3c6ba3e6e961f383783665265afbcddbbd33a3a84bba0386b7d0d4e3c632",
+      "bytes": 207349310
+    },
+    {
+      "name": "subject103.dat",
+      "sha256": "5be64631d085e3efc700728395516da3512ff9de17dab30d253508441a98d3f0",
+      "bytes": 117863364
+    },
+    {
+      "name": "subject104.dat",
+      "sha256": "7eb272213cbfe11d9e466a2163b6c9c2ed8d2542fc6f08283fd1bf222cac8994",
+      "bytes": 153227482
+    },
+    {
+      "name": "subject105.dat",
+      "sha256": "7837cfede57fe45ec20d553c6c2b0c498ab324daae23bfd202c0ffea9f71a7f6",
+      "bytes": 173773599
+    },
+    {
+      "name": "subject106.dat",
+      "sha256": "0da1dda3fa56d75d6413fc9198949d3ebc2102d77574cb5fe0739674687609f2",
+      "bytes": 168263273
+    },
+    {
+      "name": "subject107.dat",
+      "sha256": "a02195e9599eb249f79103912d27eb4f62d8a0f59e4763b0dd8250fee5f3f020",
+      "bytes": 145823268
+    },
+    {
+      "name": "subject108.dat",
+      "sha256": "81ce6b21b9c1e01dc02099c4f9387699547b08b28b387d09a56e0cb0a8af22fc",
+      "bytes": 190019653
+    },
+    {
+      "name": "subject109.dat",
+      "sha256": "5109d5cd8334769566b4ae602adf3e5f4bb7b9ee8ca678f0c481d333114b07c7",
+      "bytes": 3891140
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "lying": {
+    "precision": 0.9175257731958762,
+    "recall": 0.9595687331536388,
+    "f1-score": 0.9380764163372859,
+    "support": 742.0
+  },
+  "sitting": {
+    "precision": 0.8393939393939394,
+    "recall": 0.7813822284908322,
+    "f1-score": 0.8093498904309715,
+    "support": 709.0
+  },
+  "standing": {
+    "precision": 0.8305084745762712,
+    "recall": 0.8054794520547945,
+    "f1-score": 0.8178025034770514,
+    "support": 730.0
+  },
+  "walking": {
+    "precision": 0.9581545064377682,
+    "recall": 0.9695982627578719,
+    "f1-score": 0.9638424177010254,
+    "support": 921.0
+  },
+  "running": {
+    "precision": 0.9673024523160763,
+    "recall": 0.9441489361702128,
+    "f1-score": 0.955585464333782,
+    "support": 376.0
+  },
+  "cycling": {
+    "precision": 0.9901153212520593,
+    "recall": 0.9479495268138801,
+    "f1-score": 0.9685737308622079,
+    "support": 634.0
+  },
+  "Nordic walking": {
+    "precision": 0.9955489614243324,
+    "recall": 0.9255172413793104,
+    "f1-score": 0.9592566118656183,
+    "support": 725.0
+  },
+  "ascending stairs": {
+    "precision": 0.8972602739726028,
+    "recall": 0.9055299539170507,
+    "f1-score": 0.9013761467889908,
+    "support": 434.0
+  },
+  "descending stairs": {
+    "precision": 0.9140625,
+    "recall": 0.9140625,
+    "f1-score": 0.9140625,
+    "support": 384.0
+  },
+  "vacuum cleaning": {
+    "precision": 0.8248974008207934,
+    "recall": 0.8959881129271917,
+    "f1-score": 0.8589743589743589,
+    "support": 673.0
+  },
+  "ironing": {
+    "precision": 0.8374628344895937,
+    "recall": 0.9174809989142236,
+    "f1-score": 0.8756476683937824,
+    "support": 921.0
+  },
+  "rope jumping": {
+    "precision": 0.9435483870967742,
+    "recall": 0.7267080745341615,
+    "f1-score": 0.8210526315789474,
+    "support": 161.0
+  },
+  "accuracy": 0.901889338731444,
+  "macro avg": {
+    "precision": 0.9096484020813406,
+    "recall": 0.8911178350927641,
+    "f1-score": 0.8986333617286685,
+    "support": 7410.0
+  },
+  "weighted avg": {
+    "precision": 0.9037326878451819,
+    "recall": 0.901889338731444,
+    "f1-score": 0.9018031523088369,
+    "support": 7410.0
+  }
+}

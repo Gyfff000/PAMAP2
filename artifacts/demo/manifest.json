@@ -1,0 +1,34 @@
+{
+  "model": "rf_all",
+  "test_subject": 101,
+  "trained_on_subjects": [
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108
+  ],
+  "samples": 24,
+  "description": "Two temporal-quantile windows (25%, 75%) per class from subject 101; no filtering by prediction correctness. Paired outer-fold model; illustrative replay only.",
+  "source_dataset": "PAMAP2, UCI, DOI:10.24432/C5NW2H, CC BY 4.0",
+  "label_names": [
+    "lying",
+    "sitting",
+    "standing",
+    "walking",
+    "running",
+    "cycling",
+    "Nordic walking",
+    "ascending stairs",
+    "descending stairs",
+    "vacuum cleaning",
+    "ironing",
+    "rope jumping"
+  ],
+  "files": {
+    "model.joblib": "9d98c2be381ffa9f2722ff184d70bed60561612b86c00f8be8e09a81c768c860",
+    "sample_windows.npz": "6962fa2e74fb7a10341ff07e30703937e9bc798f79db8c09a848c31763f1b44c"
+  }
+}

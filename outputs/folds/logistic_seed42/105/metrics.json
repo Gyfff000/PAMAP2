@@ -1,0 +1,26 @@
+{
+  "accuracy": 0.8908045977011494,
+  "macro_f1": 0.8970743723676091,
+  "macro_recall": 0.8995524253419158,
+  "supported_macro_f1": 0.8970743723676091,
+  "supported_classes": 12,
+  "model": "logistic",
+  "seed": 42,
+  "test_subject": 105,
+  "train_subjects": [
+    101,
+    102,
+    103,
+    104,
+    106,
+    107,
+    108
+  ],
+  "inner_validation_subject": null,
+  "selected_epochs": null,
+  "train_windows": 6366,
+  "test_windows": 1044,
+  "seconds": 25.416062700009206,
+  "parameter_count": null,
+  "config_sha256": "0370357cf236fbee4e5a9117362eab5332ae17330f92e833b7a9a5cf45ec0dae"
+}

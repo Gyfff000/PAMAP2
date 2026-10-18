@@ -1,0 +1,102 @@
+{
+  "fusion_minus_rf_all": {
+    "differences": [
+      0.014968949252706754,
+      0.007936733923162853,
+      -0.00942635881316245,
+      -0.000816689063636189,
+      -0.002012189137117648,
+      0.02003190515146347,
+      0.004159137751374664,
+      -0.07400152837789464
+    ],
+    "mean_difference": -0.004895004914137899,
+    "bootstrap_percentile_95ci": [
+      -0.026269488541063493,
+      0.009897363861610073
+    ],
+    "exact_sign_flip_two_sided_p": 0.875,
+    "n_subjects": 8,
+    "note": "Exploratory comparison; n=8, percentile CI descriptive, no multiple-comparison correction."
+  },
+  "fusion_minus_cnn": {
+    "differences": [
+      0.07688520513250807,
+      0.17854298801964286,
+      0.023202736185976236,
+      0.027388639757746747,
+      0.05178474299411151,
+      0.004702328406264056,
+      0.013382447652397489,
+      0.480877679168253
+    ],
+    "mean_difference": 0.1070958459146125,
+    "bootstrap_percentile_95ci": [
+      0.026715135537847948,
+      0.223050386778016
+    ],
+    "exact_sign_flip_two_sided_p": 0.0078125,
+    "n_subjects": 8,
+    "note": "Exploratory comparison; n=8, percentile CI descriptive, no multiple-comparison correction."
+  },
+  "rf_all_minus_rf_wrist": {
+    "differences": [
+      0.12384837175281771,
+      0.05360765607823148,
+      0.10450989257016452,
+      0.09901219252633753,
+      0.23263358064889805,
+      0.048979064528870575,
+      0.08547399177558612,
+      0.043933850454522805
+    ],
+    "mean_difference": 0.0989998250419286,
+    "bootstrap_percentile_95ci": [
+      0.06490059048437012,
+      0.14282097587955103
+    ],
+    "exact_sign_flip_two_sided_p": 0.0078125,
+    "n_subjects": 8,
+    "note": "Exploratory comparison; n=8, percentile CI descriptive, no multiple-comparison correction."
+  },
+  "rf_all_minus_rf_chest": {
+    "differences": [
+      0.1098355007299946,
+      0.409631524146976,
+      0.036273233764601565,
+      0.15032990176839522,
+      0.046748543967827794,
+      0.035497189843750165,
+      0.1353923105680519,
+      0.0355153828981849
+    ],
+    "mean_difference": 0.11990294846097277,
+    "bootstrap_percentile_95ci": [
+      0.054169816252770675,
+      0.21380030618120602
+    ],
+    "exact_sign_flip_two_sided_p": 0.0078125,
+    "n_subjects": 8,
+    "note": "Exploratory comparison; n=8, percentile CI descriptive, no multiple-comparison correction."
+  },
+  "rf_all_minus_rf_ankle": {
+    "differences": [
+      0.066518004939215,
+      0.055390923907847056,
+      0.23773251176174004,
+      0.2554974606903051,
+      0.13067394543492528,
+      0.09144936535100134,
+      0.07605543392737246,
+      0.25764642630794965
+    ],
+    "mean_difference": 0.1463705090400445,
+    "bootstrap_percentile_95ci": [
+      0.090735894262865,
+      0.20626735042349842
+    ],
+    "exact_sign_flip_two_sided_p": 0.0078125,
+    "n_subjects": 8,
+    "note": "Exploratory comparison; n=8, percentile CI descriptive, no multiple-comparison correction."
+  }
+}

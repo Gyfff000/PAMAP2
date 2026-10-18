@@ -1,0 +1,26 @@
+{
+  "accuracy": 0.928944618599791,
+  "macro_f1": 0.8475883490665185,
+  "macro_recall": 0.8557955695187959,
+  "supported_macro_f1": 0.9246418353452929,
+  "supported_classes": 11,
+  "model": "fusion",
+  "seed": 42,
+  "test_subject": 106,
+  "train_subjects": [
+    101,
+    102,
+    103,
+    104,
+    105,
+    107,
+    108
+  ],
+  "inner_validation_subject": 107,
+  "selected_epochs": 21,
+  "train_windows": 6453,
+  "test_windows": 957,
+  "seconds": 44.42257569999492,
+  "parameter_count": 35868,
+  "config_sha256": "0370357cf236fbee4e5a9117362eab5332ae17330f92e833b7a9a5cf45ec0dae"
+}

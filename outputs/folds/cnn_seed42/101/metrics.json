@@ -1,0 +1,26 @@
+{
+  "accuracy": 0.8043933054393305,
+  "macro_f1": 0.8101359366063733,
+  "macro_recall": 0.8134761232948219,
+  "supported_macro_f1": 0.8101359366063733,
+  "supported_classes": 12,
+  "model": "cnn",
+  "seed": 42,
+  "test_subject": 101,
+  "train_subjects": [
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108
+  ],
+  "inner_validation_subject": 102,
+  "selected_epochs": 5,
+  "train_windows": 6454,
+  "test_windows": 956,
+  "seconds": 14.869423900003312,
+  "parameter_count": 19052,
+  "config_sha256": "0370357cf236fbee4e5a9117362eab5332ae17330f92e833b7a9a5cf45ec0dae"
+}

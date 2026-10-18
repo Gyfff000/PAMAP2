@@ -1,0 +1,26 @@
+{
+  "accuracy": 0.7078544061302682,
+  "macro_f1": 0.6969473625127188,
+  "macro_recall": 0.7206941390428483,
+  "supported_macro_f1": 0.6969473625127188,
+  "supported_classes": 12,
+  "model": "rf_wrist",
+  "seed": 42,
+  "test_subject": 105,
+  "train_subjects": [
+    101,
+    102,
+    103,
+    104,
+    106,
+    107,
+    108
+  ],
+  "inner_validation_subject": null,
+  "selected_epochs": null,
+  "train_windows": 6366,
+  "test_windows": 1044,
+  "seconds": 2.3100889999914216,
+  "parameter_count": null,
+  "config_sha256": "0370357cf236fbee4e5a9117362eab5332ae17330f92e833b7a9a5cf45ec0dae"
+}

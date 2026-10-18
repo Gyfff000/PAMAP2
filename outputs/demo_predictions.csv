@@ -1,0 +1,25 @@
+﻿window_index,subject,true_activity,predicted_activity,correct
+26,101,lying,lying,True
+78,101,lying,lying,True
+127,101,sitting,lying,False
+172,101,sitting,sitting,True
+215,101,standing,standing,True
+257,101,standing,standing,True
+592,101,walking,walking,True
+634,101,walking,walking,True
+845,101,running,running,True
+886,101,running,running,True
+756,101,cycling,cycling,True
+802,101,cycling,cycling,True
+675,101,Nordic walking,Nordic walking,True
+714,101,Nordic walking,Nordic walking,True
+471,101,ascending stairs,ascending stairs,True
+529,101,ascending stairs,ascending stairs,True
+500,101,descending stairs,descending stairs,True
+557,101,descending stairs,descending stairs,True
+391,101,vacuum cleaning,vacuum cleaning,True
+435,101,vacuum cleaning,vacuum cleaning,True
+300,101,ironing,ironing,True
+346,101,ironing,ironing,True
+919,101,rope jumping,rope jumping,True
+943,101,rope jumping,rope jumping,True

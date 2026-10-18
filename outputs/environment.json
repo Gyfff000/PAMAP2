@@ -1,0 +1,12 @@
+{
+  "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "numpy": "2.4.3",
+  "scipy": "1.17.1",
+  "scikit_learn": "1.9.1",
+  "torch": "2.12.0+cpu",
+  "cuda_available": false,
+  "torch_threads": 6,
+  "config_sha256": "0370357cf236fbee4e5a9117362eab5332ae17330f92e833b7a9a5cf45ec0dae",
+  "run_started_utc": "2026-10-18T12:00:47Z"
+}

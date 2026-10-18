@@ -1,0 +1,182 @@
+% !TeX program = xelatex
+\documentclass[UTF8,zihao=-4,a4paper,fontset=windows]{ctexart}
+\usepackage[left=26mm,right=26mm,top=25mm,bottom=25mm]{geometry}
+\usepackage{amsmath,amssymb,graphicx,booktabs,array}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\setlength{\parskip}{0.25em}
+\raggedbottom
+\setlength{\textfloatsep}{14pt plus 3pt minus 3pt}
+\renewcommand{\arraystretch}{1.15}
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\textfraction}{0.08}
+\renewcommand{\floatpagefraction}{0.75}
+\graphicspath{{../outputs/figures/}}
+\input{generated/results}
+\input{author_info}
+\title{多部位时序与统计特征融合的\\跨受试者人体活动识别研究}
+\date{}
+\begin{document}
+\maketitle
+\begin{abstract}
+针对可穿戴人体活动识别中的受试者差异、传感器部位差异及不完整录制问题，本文基于 PAMAP2 原始数据开展十二类监督分类研究。选择手腕、胸部与脚踝的加速度及角速度信号，经过短缺失插值、长缺失分段和抗混叠降采样，构建 7410 个离线活动窗口。比较统计特征逻辑回归、随机森林、早期融合一维卷积网络，以及三个部位时序编码器与统计特征分支拼接的融合模型。采用八折留一受试者评估，神经网络训练轮数仅通过内层受试者验证选择，再在完整外层训练集重训。四种主模型的汇总宏平均 F1 分别为 \LRFone、\RFFone、\CNNFone\ 和 \FusionFone。另以固定随机森林进行单部位与移除部位实验，分析传感器信息的互补性。结果显示，本次配置下 \BestName\ 取得最高的汇总宏平均 F1，但模型表现仍随受试者与活动类别变化。本文提供统一分组协议下的对比、部位消融和可核验预测记录；结论仅适用于标注活动内部的离线窗口分类，不等同于连续流中的在线识别能力。
+\par\noindent\textbf{关键词：}人体活动识别；多传感器融合；留一受试者评估；一维卷积网络；PAMAP2
+\end{abstract}
+\vspace{0.5em}
+\begin{center}\bfseries Cross-Subject Human Activity Recognition through Multi-Location Temporal and Statistical Feature Fusion\end{center}
+\noindent\textbf{Abstract:} This study evaluates twelve-class activity recognition using the original PAMAP2 recordings. Acceleration and angular velocity from the wrist, chest and ankle are processed into 7,410 offline windows. Logistic regression, random forests, an early-fusion CNN and a sensor-specific temporal/statistical fusion network are compared under eight-fold leave-one-subject-out evaluation. Neural training epochs are selected using an inner validation participant before refitting on all outer-training participants. The pooled macro-F1 scores are \LRFone, \RFFone, \CNNFone\ and \FusionFone, respectively. Additional random-forest experiments examine individual and removed sensor locations. The findings characterize model-dependent and participant-dependent performance rather than establish universal superiority. Transition detection and unrestricted online deployment are outside the evaluated scope.
+\par\noindent\textbf{Key words:} activity recognition; sensor fusion; subject-disjoint evaluation; convolutional network; PAMAP2
+
+\section{数据描述与研究问题}
+可穿戴传感器通过不同身体部位的运动变化描述人体活动。同一类别的信号会受到步态、动作幅度和佩戴差异影响；同一受试者的相邻窗口则通常高度相关。因此，随机拆分窗口可能使训练集和测试集同时包含同一个人的相邻运动片段，难以回答模型能否推广到新受试者的问题。本文以受试者隔离为评价基础，考察传统统计特征、时序卷积和多部位融合在同一数据处理协议下的表现。
+
+已有研究表明，卷积和循环网络可以用于可穿戴活动识别，但模型结构和超参数的适用性依赖具体任务\cite{ordonez,hammerla}。本文不复现这些文献的全部网络，也不把结构拼接视为新架构贡献，而是建立可运行的轻量模型，并回答三个具体问题：统计特征分类器与时序网络的成绩有何差异；多个佩戴部位是否提供互补信息；哪些受试者和活动类别仍容易出现识别错误。
+
+\subsection{数据来源与任务范围}
+PAMAP2 由九名受试者佩戴三组惯性测量单元和心率设备采集，完整数据包含十八种活动\cite{uci}。Protocol 规定十二种活动，Optional 为额外活动；两者不应直接合并后仍称为相同的十二类任务。本文仅使用 Protocol，采用手腕、胸部和脚踝的三轴 $\pm16g$ 加速度与三轴角速度，共十八个输入通道。官方说明推荐使用 $\pm16g$ 加速度，以减少较小量程饱和和校准差异的影响\cite{readme}。心率、磁力计、温度、重复量程加速度和无效姿态列不参与本实验。
+
+受试者 109 的 Protocol 记录仅覆盖部分活动，故保留其审计记录但不纳入主实验。主实验采用 101--108 八名受试者，原始共 \RawRows\ 条逐时刻记录。其活动录制也不完全均衡，尤其 103 缺少四类活动；不能将所有个体当作均有十二类完整记录。表\ref{tab:data}与图\ref{fig:coverage}给出处理后的覆盖情况。原始文件、压缩包及处理后数组均记录 SHA-256，便于追溯数据版本。
+
+\begin{table}[htbp]\centering
+\caption{主实验数据覆盖与缺失情况}\label{tab:data}
+\input{generated/data_table}
+\par\small 注：缺失率按所选十八个传感器列在该受试者全部原始记录中的缺失元素比例计算；活动数为切窗后有样本的类别数。
+\end{table}
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=0.94\linewidth]{data_coverage.pdf}
+\caption{各受试者与活动类别的窗口数量。零值表示对应活动未产生可用窗口。}\label{fig:coverage}
+\end{figure}
+
+\subsection{预处理与窗口构建}
+首先按受试者分别处理文件，在活动标签变化、时间戳增量超过 $0.03\,\mathrm{s}$ 或不递增的位置切开记录；不属于规定十二类的过渡标签不保留。任一所选通道若出现超过五十个原始采样点的连续缺失，则排除对应区间并再次切分；不足该阈值的缺失只在当前连续活动段内部插值，段边缘采用最近有效值。该处理不跨越受试者、活动变化或长缺失区间。
+
+在原始 $100\,\mathrm{Hz}$ 记录上使用多相低通滤波降采样至 $50\,\mathrm{Hz}$\cite{scipy}，每窗包含 256 点，持续 $5.12\,\mathrm{s}$，步长为 128 点，即相邻窗口重叠 50\%。不足完整窗口的尾部不填充，最终获得 $7410\times18\times256$ 的信号张量。各折的训练与测试受试者完全不同，因此重叠窗口不会跨越两部分。
+
+这里使用标注边界保留纯活动窗口，属于离线识别基准。插值和零相位滤波还会利用同一活动段内前后的信号，因此不能将结果解释为不使用未来信息的在线系统性能。传感器减少实验统一使用三部位共同可用的窗口，以保持样本一致；它并不估计单传感器在实际部署中可能额外保留的数据量。
+
+\section{模型描述}
+\subsection{统计特征与标准化}
+每个信号通道提取均值、标准差、最小值、最大值、均方根、去均值频谱的谱熵和主频七项特征，六个通道合计四十二维。另对加速度与角速度的三轴模长各提取均值、标准差、最小值和最大值，合计八维。因此每个部位有五十维，三个部位拼接得到 $\boldsymbol f\in\mathbb R^{150}$。设去均值频谱功率为 $P_k$，并将直流项置零，则谱熵为
+\begin{equation}
+ H=-\sum_k p_k\log(p_k+\epsilon),\qquad p_k=\frac{P_k}{\max(\sum_jP_j,\epsilon)}.
+\end{equation}
+所有统计特征仅依赖单个窗口，不从完整数据拟合变换。对于需要标准化的模型，以当前训练部分估计均值和标准差：
+\begin{equation}
+ z_j=\frac{f_j-\mu_j^{\mathrm{train}}}{\max(\sigma_j^{\mathrm{train}},10^{-6})}.
+\end{equation}
+神经网络信号输入另按通道在训练窗口和时间轴上估计标准化参数。验证集或测试集不参与这些参数的估计。
+
+\subsection{逻辑回归与随机森林}
+逻辑回归使用多类 Softmax 线性分类器，以 L2 正则化限制参数规模，固定 $C=1$、最大迭代数 2000，类别权重采用训练样本的平衡权重。它用于检验统计特征是否已经足以形成具有区分度的表示。
+
+随机森林通过多棵决策树集成建模非线性关系\cite{breiman}。本实验固定 240 棵树、每叶最少两个样本、每次分裂考虑约 $\sqrt d$ 个特征，并采用各自助样本内部的平衡类别权重。不设最大树深度，不进行标准化。单部位和移除部位实验保持树数等设置相同，只改变输入的部位特征列。由于维度 $d$ 随之变化，默认分裂候选数也变化，因此这是固定训练规则下的系统对比，而非只改变一个物理传感器的完全因果实验。
+
+\subsection{早期融合卷积网络}
+早期融合 CNN 将十八通道同时送入卷积编码器。三层卷积的通道数为 $18\to24\to48\to64$，核宽为 $7,5,3$，步长均为 2，每层后接批归一化和 ReLU。时间长度由 256 降至 128、64、32，随后执行全局平均池化、丢弃率 0.25 的 Dropout 和十二类线性分类。该模型参数量为 \CNNParams，不使用人工统计特征。
+
+\subsection{部位时序与统计特征融合}
+融合模型为每个部位建立一个独立编码器。每个分支仅接收该部位六通道信号，三层通道数为 $6\to16\to24\to32$，卷积核、步长与早期融合网络一致。每个分支池化后得到三十二维表示。统计特征分支以标准化的一百五十维向量为输入，通过 $150\to64$ 的全连接层、ReLU 和 Dropout，得到六十四维表示。
+\begin{align}
+ \boldsymbol h_s&=\operatorname{GAP}(E_s(\boldsymbol X_s))\in\mathbb R^{32},\quad s\in\{w,c,a\},\\
+ \boldsymbol h_f&=\operatorname{Dropout}(\operatorname{ReLU}(W_f\boldsymbol z+b_f))\in\mathbb R^{64},\\
+ \boldsymbol u&=[\boldsymbol h_w;\boldsymbol h_c;\boldsymbol h_a;\boldsymbol h_f]\in\mathbb R^{160}.
+\end{align}
+最终通过 $160\to64\to12$ 的分类头输出类别。模型参数量为 \FusionParams。局部分支保留不同部位的表征，统计特征提供动作姿态与幅度等窗口信息；能否带来额外收益需要根据实验判断。该结构没有显式注意力权重，不能把随机森林消融的成绩解释为神经网络学得的部位重要性。
+
+两个神经网络都使用 AdamW，学习率 $10^{-3}$、权重衰减 $10^{-4}$、批量大小 128，最大训练二十五轮。损失为按训练类别计数平方根倒数加权的交叉熵，权重均值归一化为 1，并把梯度范数截断为 5。只使用 CPU，固定随机种子与确定性计算；运行环境为 Python \PythonVersion、PyTorch \TorchVersion、scikit-learn \SklearnVersion。
+
+\section{实验协议与评价指标}
+\subsection{外层留一受试者与内层选轮数}
+外层采用八折留一受试者协议\cite{logo}。每折留一名受试者测试，其余七人用于训练；八折结束后，每个窗口恰好得到一次未使用其受试者训练的预测。模型结构、窗口长度和超参数在外层结果检查前固定，不针对外层成绩进行后续调参。
+
+神经网络的训练轮数通过内层受试者验证选择。按照编号循环顺序，取外层测试受试者的下一位作为内层验证人，其余六人为内层训练人；验证 Macro-F1 连续六轮未提升则提前停止，最多二十五轮。随后丢弃内层模型，使用相同折种子重新初始化，在七名外层训练人上训练所选轮数，最后对外层测试人预测。这样，测试受试者既不决定训练轮数，也不参与标准化和类别权重计算。两种网络的实际选择见表\ref{tab:epochs}。
+
+\begin{table}[htbp]\centering
+\caption{各折神经网络训练轮数的内层选择}\label{tab:epochs}
+\input{generated/epoch_table}
+\end{table}
+
+\subsection{指标与类别缺失}
+以汇总全部外层预测后的十二类宏平均 F1 为主指标：
+\begin{equation}
+ F_{1,c}=\frac{2TP_c}{2TP_c+FP_c+FN_c},\qquad
+ F_1^{\mathrm{macro}}=\frac1{12}\sum_{c=1}^{12}F_{1,c}.
+\end{equation}
+另外报告 Accuracy 与宏平均召回率。分母为零时该类别分数取零。由于一些人未录制所有活动，固定十二类的单人 Macro-F1 会把未出现类别计为零，难以单独反映其已有活动的识别质量。因此补充使用每人真实出现类别集合 $C_s$ 计算
+\begin{equation}
+ F_{1,s}^{\mathrm{supported}}=\frac1{|C_s|}\sum_{c\in C_s}F_{1,c,s},\qquad
+ \bar F_1=\frac18\sum_sF_{1,s}^{\mathrm{supported}}.
+\end{equation}
+表格中个人均值与标准差使用这一补充定义；其含义不同于合并所有窗口后的十二类 Macro-F1，两者不要求相等。各人未出现类别的误预测仍会通过实际类别的假阴性降低分数。
+
+受试者是结果分析的单位。对于融合与其他模型的差值，报告八个配对个人分数的均值及受试者重采样百分位区间，并计算全部 $2^8$ 种符号翻转的双侧探索性结果；不把重叠窗口当作独立样本。八名受试者较少、各折训练集重叠且比较未经多重检验校正，因此这些区间和 $p$ 值只作为描述性补充，不据此宣称普遍显著优越。
+
+\section{实验结果与分析}
+\subsection{主模型对比}
+\begin{table}[htbp]\centering
+\caption{四种主模型的八折外层预测结果}\label{tab:main}
+\input{generated/main_table}
+\par\small 注：汇总 F1 固定十二类；个人 F1 按该人实际出现类别计算；SD 为八人的样本标准差，非置信区间。
+\end{table}
+\input{generated/main_discussion}
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=0.96\linewidth]{model_comparison.pdf}
+\caption{主模型的汇总与个人成绩。橙色误差线表示个人分数的样本标准差。}\label{fig:models}
+\end{figure}
+
+\subsection{传感器部位对比}
+\begin{table}[htbp]\centering
+\caption{固定随机森林训练规则下的部位输入实验}\label{tab:ablation}
+\input{generated/ablation_table}
+\end{table}
+\input{generated/ablation_discussion}
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=0.96\linewidth]{sensor_ablation.pdf}
+\caption{随机森林部位实验。灰线为单个受试者的配对结果，蓝线为八人均值。}\label{fig:ablation}
+\end{figure}
+
+\subsection{类别与个体差异}
+\begin{table}[htbp]\centering
+\caption{各活动类别的窗口数量与汇总 F1}\label{tab:class}
+\input{generated/class_table}
+\end{table}
+\input{generated/class_discussion}
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=0.94\linewidth,height=0.80\textheight,keepaspectratio]{confusion_matrices.pdf}
+\caption{随机森林与融合模型的行归一化混淆矩阵，数字为真实类别内部的预测比例。类别编号对应表\ref{tab:class}。}\label{fig:cm}
+\end{figure}
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=0.96\linewidth]{subject_generalization.pdf}
+\caption{每位未见受试者的实际出现类别 Macro-F1。}\label{fig:subjects}
+\end{figure}
+\input{generated/subject_discussion}
+
+\subsection{结果核验与模型使用}
+成绩分析直接读取各折保存的标签、预测、窗口索引和受试者编号，检查每个窗口恰好被外层测试一次，并重新计算全部主指标。重算结果与训练入口保存的分数一致。配置、数据版本和逐折预测的哈希随结果保留；训练曲线、内层选轮数和重新拟合曲线可追溯。
+
+在模型评估完成后，按四种主模型的汇总 Macro-F1 选择一个模型，在全部八名受试者上拟合，作为演示与后续应用模型。神经网络若被选中，则使用各外层折内层所选轮数的中位数。这个全数据模型没有另一个独立测试集，不能把已有 LOSO 分数当作该模型新获得的独立测试成绩。另提供受试者 101 的少量窗口与对应外层模型进行预测回放；它未用 101 训练，但少量演示窗口不构成额外性能评估。
+
+\section{局限与结论}
+本实验只覆盖八名受试者、受控活动及固定佩戴部位，缺失活动和类别分布不均会影响汇总与个人指标。单一基础种子没有覆盖网络初始化的全部波动；循环选取单个内层验证人的设计也可能受其活动覆盖影响。最大二十五轮及固定小型结构限制了计算成本，但不代表这些模型各自的最优性能。不同模型的容量、输入表示和优化难度不同，不能把某次成绩差异全部归因于网络结构。
+
+本实验使用已知标注边界、离线插值与滤波，不评价过渡活动、未知活动、实时延迟及传感器丢失情况下的在线鲁棒性。部位对照只在共同保留的窗口上、以随机森林实现，不能替代融合网络本身的删分支实验。模型选择依据同一组 LOSO 结果，最佳模型的成绩存在选择偏差；未来应以新的独立受试者验证，并增加多种子复验、在线分段和按传感器质量自适应处理。
+
+本文在 PAMAP2 上构建了统一且可追溯的十二类活动识别流程，比较统计特征分类器、早期时序融合与部位/统计联合融合，并通过部位对照与类别误差呈现其适用范围。本次设置下 \BestName\ 的汇总 Macro-F1 最高，为 \BestFone；这一结论是固定协议下的实证结果，不构成对更复杂网络或更多传感器必然更优的推论。
+
+\clearpage
+\begin{thebibliography}{9}
+\bibitem{ordonez} ORDÓÑEZ F J, ROGGEN D. Deep convolutional and LSTM recurrent neural networks for multimodal wearable activity recognition[J]. Sensors, 2016, 16(1): 115. DOI: \href{https://doi.org/10.3390/s16010115}{10.3390/s16010115}.
+\bibitem{hammerla} HAMMERLA N Y, HALLORAN S, PLOETZ T. Deep, convolutional, and recurrent models for human activity recognition using wearables[EB/OL]. arXiv:1604.08880, 2016. \url{https://arxiv.org/abs/1604.08880}.
+\bibitem{uci} REISS A. PAMAP2 Physical Activity Monitoring[DS/OL]. UCI Machine Learning Repository, 2012[2026-10-18]. DOI: \href{https://doi.org/10.24432/C5NW2H}{10.24432/C5NW2H}.
+\bibitem{readme} REISS A, STRICKER D. PAMAP2 Dataset: Physical Activity Monitoring, README and data documentation[EB/OL]. 2012[2026-10-18]. \url{https://archive.ics.uci.edu/ml/machine-learning-databases/00231/readme.pdf}.
+\bibitem{scipy} SCIPY DEVELOPERS. scipy.signal.resample\_poly[EB/OL]. [2026-10-18]. \url{https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.resample_poly.html}.
+\bibitem{breiman} BREIMAN L. Random forests[J]. Machine Learning, 2001, 45: 5--32. DOI: \href{https://doi.org/10.1023/A:1010933404324}{10.1023/A:1010933404324}.
+\bibitem{logo} SCIKIT-LEARN DEVELOPERS. LeaveOneGroupOut: subject-grouped cross-validation[EB/OL]. [2026-10-18]. \url{https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.LeaveOneGroupOut.html}.
+\end{thebibliography}
+\end{document}
