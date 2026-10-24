@@ -32,10 +32,13 @@
 | `04_train_deployment.py` | 全部八人重训演示/部署模型，另导出严格隔离的少量预测示例 |
 | `05_predict_demo.py` | 加载保存模型进行预测，并核查文件与特征一致性 |
 | `main.py` | VS 默认入口，展示已有评估结果 |
+| `07_inspect_raw_data.py` | 只读展示原始文件、54 列结构和真实传感器记录，无需额外 Python 包 |
 | `paper/main.tex`、`paper/main.pdf` | 中文学术报告源码与 PDF |
 | `AI使用记录.md` | 独立保存的 AI 参与说明及关键提示 |
 
 ## 数据与处理
+
+给助教展示原始数据时，可打开 `data/raw/Protocol` 查看九个受试者文件，再在 VS 将 `07_inspect_raw_data.py` 设为启动文件，按 Ctrl+F5。程序默认预览 subject101，解释字段并直接读取原文件中的传感器值，不插值、不降采样、不训练、不修改原文件。`NaN` 是原始缺失值，开头的类别 0 是过渡活动。完整列定义见本机 `data/raw/documentation/readme.pdf`。
 
 - 数据源：[UCI PAMAP2](https://archive.ics.uci.edu/dataset/231/pamap2+physical+activity+monitoring)，DOI `10.24432/C5NW2H`，CC BY 4.0。原始数据不放进 Git。
 - 采用 Protocol 的 12 类：躺卧、坐、站立、步行、跑步、骑车、北欧式行走、上楼、下楼、吸尘、熨烫、跳绳。

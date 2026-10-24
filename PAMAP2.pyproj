@@ -26,6 +26,7 @@
     <Compile Include="04_train_deployment.py" />
     <Compile Include="05_predict_demo.py" />
     <Compile Include="06_build_report_assets.py" />
+    <Compile Include="07_inspect_raw_data.py" />
     <Compile Include="src\pamap2\*.py" />
     <Compile Include="tests\*.py" />
     <Content Include="README.md" />
