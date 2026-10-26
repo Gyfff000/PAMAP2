@@ -1,0 +1,32 @@
+{
+  "protocol_version": 2,
+  "seed": 42,
+  "train_windows": 5187,
+  "test_windows": 2223,
+  "train_fraction": 0.7,
+  "test_fraction": 0.3,
+  "cv_folds": 3,
+  "cv_validation_windows": [
+    1729,
+    1729,
+    1729
+  ],
+  "group_unit": "Whole uninterrupted annotated activity segment after long-gap removal",
+  "subject_disjoint": false,
+  "split_selection_uses_predictions": false,
+  "historical_data_use": "These data were previously assessed under LOSO; this is not a new external dataset.",
+  "assignment_sha256": "0421fd844f0eef3129c0daf0593f15615d0b16b4bb2e635f4d7535317db7b320",
+  "solver": {
+    "method": "Count-based mixed-integer stratified group allocation",
+    "solver_message": "Time limit reached. (HiGHS Status 13: Time limit reached)",
+    "objective": 1.2157394609701564,
+    "mip_gap": 0.2949767357773143,
+    "optimality_claimed": false,
+    "note": "Frozen feasible partition; exact sizes and isolation are independently asserted. No prediction or signal values used."
+  },
+  "processed_hashes": {
+    "labels.npy": "a7f175ae65e4ad7c22c4b63528624fa43dc12ee8eb24d11f915d363a207e5f59",
+    "subjects.npy": "ff5898139e9bdde99134fcdc3e7ed095d8d1e3554bf8c84697105c6c6a013775",
+    "window_metadata.npy": "be9d57b3344c5282a5a2bd36971a8e3bd40e5213e39dbb39bbe644893f418656"
+  }
+}

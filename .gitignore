@@ -7,6 +7,7 @@ data/raw/
 data/processed/
 models/
 outputs/folds/**/predictions.npz
+outputs/holdout/**/predictions.npz
 logs/
 tmp/
 paper/*.aux

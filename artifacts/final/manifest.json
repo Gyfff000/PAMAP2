@@ -1,20 +1,14 @@
 {
+  "protocol_version": 2,
   "model": "rf_all",
-  "trained_on_subjects": [
-    101,
-    102,
-    103,
-    104,
-    105,
-    106,
-    107,
-    108
-  ],
-  "training_windows": 7410,
-  "selected_epochs": null,
-  "selection_rule": "Highest pooled LOSO macro-F1 among four prespecified main models.",
-  "evaluation_warning": "Refitted on all eight subjects for demonstration/deployment. No new independent test score is claimed.",
-  "fit_seconds": 2.411204700008966,
+  "training_windows": 5187,
+  "test_windows": 2223,
+  "subject_disjoint": false,
+  "group_disjoint": true,
+  "selection_rule": "Mean 12-class macro-F1 over training-only three-fold group CV",
+  "test_used_for_selection": false,
+  "description": "Same 70%-trained model as final test; no all-data refit. Demo uses two fixed temporal-index quantiles per test class, without correctness filtering.",
+  "samples": null,
   "label_names": [
     "lying",
     "sitting",
@@ -29,9 +23,10 @@
     "ironing",
     "rope jumping"
   ],
-  "config_sha256": "0370357cf236fbee4e5a9117362eab5332ae17330f92e833b7a9a5cf45ec0dae",
-  "data_audit_sha256": "30947305e5c3195d72d72639037a8790dc7976f72663c459be8e4b182dd095f3",
+  "source_dataset": "PAMAP2, UCI DOI:10.24432/C5NW2H, CC BY 4.0",
+  "config_sha256": "e9c445344e79aefc395082e2000ffae5ef6702ccb104f900c3411a50df9ebb63",
+  "split_sha256": "0421fd844f0eef3129c0daf0593f15615d0b16b4bb2e635f4d7535317db7b320",
   "files": {
-    "model.joblib": "e36574183de7fec907e4a9f5dbe13b5c45a41f3d429828628751d7ea94df4796"
+    "model.joblib": "807d041388c74a61fb84b82e7385d69d149a7ead7f4e12291ef0395c84f952ea"
   }
 }

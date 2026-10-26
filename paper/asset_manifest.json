@@ -1,11 +1,14 @@
 {
+  "protocol_version": 2,
   "macros": {
-    "LRFone": "0.8853",
-    "RFFone": "0.9279",
-    "CNNFone": "0.8132",
-    "FusionFone": "0.9223",
+    "LRFone": "0.7998",
+    "RFFone": "0.9261",
+    "CNNFone": "0.5693",
+    "FusionFone": "0.8526",
     "BestName": "随机森林",
-    "BestFone": "0.9279",
+    "BestFone": "0.9261",
+    "BestCV": "0.9105",
+    "BestAccuracy": "0.9213",
     "RawRows": "2864056",
     "CNNParams": "19052",
     "FusionParams": "35868",
@@ -14,20 +17,22 @@
     "SklearnVersion": "1.9.1"
   },
   "sources": {
-    "data_audit.json": "30947305e5c3195d72d72639037a8790dc7976f72663c459be8e4b182dd095f3",
-    "environment.json": "9da36c3838fc7bbfc7bba13d73ff383d59b78ac676cd070f643c821746d40bc1",
-    "model_comparison.csv": "a0207b9f0eecf18e0ba39472d27ca22c82b4aa0cbe617a0425f9d0fc6ffe0512",
-    "class_f1.csv": "ea693709a00a3d715b4751491dcdf94d6b675cf12b6617644fda4d27fcdd0219",
-    "supported_subject_f1.csv": "9ba3990faab8b5cb0c3a408f682e564202feb117d0cb0ef9bba06f36248ae5a2",
-    "statistical_comparisons.json": "3c2c2dc94b68a42e6b80df4b89a9c5a5ad8174af07a0ce75405c56de04c478b6",
-    "result_audit.json": "1ed1a398dce7bb6fb139f9a1be4182a0d391e0e65e3037ed05aefd4aa7d7571d"
+    "outputs/holdout/model_summary.json": "8f2b3a70e8dcccb5cc7aabea5faad01b4bc408877127a40c0a82dadf9b03eb14",
+    "outputs/holdout/cv_summary.csv": "cf36e543aed6a26a021e1cbec058616a77f2437f1fe4d16af6ec5d254fa1d755",
+    "outputs/holdout/split_assignments.csv": "0421fd844f0eef3129c0daf0593f15615d0b16b4bb2e635f4d7535317db7b320",
+    "outputs/holdout/split_manifest.json": "bf59528c69b6aa64864bfa2dd7cd14d35a8b51002fe3294e30f6a20a479c1cd4",
+    "outputs/holdout/split_class_counts.csv": "f29743b0ca60a570429bf48ff72b89b592e4ad0bd94ed2eb006f398a94593714",
+    "outputs/holdout/model_selection.json": "adc5109844f6264dd47a70866b34472789bce9886eb836bbc9c267153a991bd3",
+    "outputs/holdout/class_f1.csv": "ad9bc948ccc1ddcd4d28d2cbfea2cd80079fc6653bd6424227dc9e1e67f0fab4",
+    "outputs/holdout/subject_f1.csv": "7f6426f5020e8f860a35040dd7e26a13bd3add7ec0263982df8850fe9db0aa51",
+    "outputs/holdout/result_audit.json": "1b5daa929e2d9124fad26291b922bd6fa9b30dbb88589a1272712efecd8f8e0b",
+    "outputs/holdout/environment.json": "5a77e7be4b8f5267bf954d30fdf059f69b736c37cdec19cf1f1cd96a8caf6656"
   },
   "figures": {
-    "class_f1.pdf": "e3a993c424c2dad292cb3091e17d4f05203f5bae1eca165bf6357d5ed45c6988",
-    "confusion_matrices.pdf": "39a1aaa70b229d16c55d158d5739f52a9c40cfabb1a3630bd7649dd9b34fb498",
-    "data_coverage.pdf": "72c6dfcf3bc974bde3dbb568c249e6d697deb0bbd3fb434830c22fb21d84b8cc",
-    "model_comparison.pdf": "0f06fbac92a749d1cf20f4bedb47d2bc647a1d76ac92fadb5e5870ae8a41260d",
-    "sensor_ablation.pdf": "b8564f7a3fe3e19fb87a527b8a3b219ef3b77fe63d0df3ad5e744903fea925c5",
-    "subject_generalization.pdf": "cae602a32cfb204a6fc3350312d3a158e72ec1d9d97c94947580a9a9a3f6aed1"
+    "confusion_matrices.pdf": "5e54ae5e40dba815ce9f212ae70c84857edbae48086d61e1080794bc11d58ef3",
+    "data_coverage.pdf": "feba7a51b4507ccf704fdde62661ba2add441be2a9c47ef2ce514b9757cbc061",
+    "model_comparison.pdf": "75371e8bbb1ee59ef8d466b988067e3379518cb7eb76e27cd80e74385e8f8f4c",
+    "sensor_ablation.pdf": "f3132748d67d4b36a5f440acc956edf8d5753d14a8bfb9e46bb3f9f5338a10e7",
+    "subject_generalization.pdf": "4dafff21bb4aa6dac651a92445a49a7d24a3570780a2038049045f0e1308e5c9"
   }
 }

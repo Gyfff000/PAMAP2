@@ -1,18 +1,14 @@
 {
+  "protocol_version": 2,
   "model": "rf_all",
-  "test_subject": 101,
-  "trained_on_subjects": [
-    102,
-    103,
-    104,
-    105,
-    106,
-    107,
-    108
-  ],
+  "training_windows": 5187,
+  "test_windows": 2223,
+  "subject_disjoint": false,
+  "group_disjoint": true,
+  "selection_rule": "Mean 12-class macro-F1 over training-only three-fold group CV",
+  "test_used_for_selection": false,
+  "description": "Same 70%-trained model as final test; no all-data refit. Demo uses two fixed temporal-index quantiles per test class, without correctness filtering.",
   "samples": 24,
-  "description": "Two temporal-quantile windows (25%, 75%) per class from subject 101; no filtering by prediction correctness. Paired outer-fold model; illustrative replay only.",
-  "source_dataset": "PAMAP2, UCI, DOI:10.24432/C5NW2H, CC BY 4.0",
   "label_names": [
     "lying",
     "sitting",
@@ -27,8 +23,11 @@
     "ironing",
     "rope jumping"
   ],
+  "source_dataset": "PAMAP2, UCI DOI:10.24432/C5NW2H, CC BY 4.0",
+  "config_sha256": "e9c445344e79aefc395082e2000ffae5ef6702ccb104f900c3411a50df9ebb63",
+  "split_sha256": "0421fd844f0eef3129c0daf0593f15615d0b16b4bb2e635f4d7535317db7b320",
   "files": {
-    "model.joblib": "9d98c2be381ffa9f2722ff184d70bed60561612b86c00f8be8e09a81c768c860",
-    "sample_windows.npz": "6962fa2e74fb7a10341ff07e30703937e9bc798f79db8c09a848c31763f1b44c"
+    "model.joblib": "807d041388c74a61fb84b82e7385d69d149a7ead7f4e12291ef0395c84f952ea",
+    "sample_windows.npz": "785b8485dc3aedb69a31a949c4329477aec87ba12151a2c91d7d20b55a7fe5ff"
   }
 }

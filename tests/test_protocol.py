@@ -4,30 +4,50 @@ import unittest
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'src'))
 import numpy as np
-from pamap2.common import CHANNELS, SUBJECTS
+from pamap2.common import CHANNELS
 from pamap2.prepare import runs, long_missing_rows, interpolate, features
-from pamap2.experiment import split_subjects, feature_indices, normalization
+from pamap2.experiment import feature_indices, normalization
 from pamap2.models import make_model
+from pamap2.protocol import validate_split, OUT
+import csv
 
 class ProtocolTests(unittest.TestCase):
+    def frozen_split(self):
+        with (OUT/'split_assignments.csv').open(encoding='utf-8-sig') as f:
+            rows=list(csv.DictReader(f))
+        return tuple(np.array([int(r[k]) for r in rows]) for k in ['activity','segment','partition'])
+
+    def test_exact_ratio_and_training_only_cv(self):
+        y,segments,assignment=self.frozen_split()
+        train,test,folds=validate_split(y,segments,assignment)
+        self.assertEqual((len(train),len(test)),(5187,2223))
+        for fit,val in folds:
+            self.assertEqual((len(fit),len(val)),(3458,1729))
+            self.assertFalse(set(test)&(set(fit)|set(val)))
+            self.assertFalse(set(segments[fit])&set(segments[val]))
+            self.assertFalse(set(segments[test])&set(segments[val]))
+
+    def test_rejects_window_leakage(self):
+        y,segments,assignment=self.frozen_split()
+        # Swap two same-label windows across partitions: sizes/classes stay valid,
+        # but each entire recording segment must still belong to only one side.
+        a=np.flatnonzero((y==0)&(assignment==0))[0]
+        b=np.flatnonzero((y==0)&(assignment==1))[0]
+        assignment[a],assignment[b]=assignment[b],assignment[a]
+        with self.assertRaisesRegex(AssertionError,'cross partitions'):
+            validate_split(y,segments,assignment)
+
     def test_original_column_mapping(self):
         # Official columns are 1-based: hand acceleration 5-7, gyro 11-13.
         self.assertEqual(CHANNELS[:6],[4,5,6,10,11,12])
         self.assertEqual(CHANNELS[6:12],[v+17 for v in CHANNELS[:6]])
         self.assertEqual(CHANNELS[12:],[v+34 for v in CHANNELS[:6]])
 
-    def test_group_isolation(self):
-        g=np.repeat(SUBJECTS,3)
-        held_out=[]
-        for subject in SUBJECTS:
-            inner,val,train,test,vs=split_subjects(g,subject)
-            self.assertFalse(set(g[inner]) & set(g[val]))
-            self.assertFalse(set(g[train]) & set(g[test]))
-            self.assertFalse(set(g[val]) & set(g[test]))
-            self.assertEqual(len(set(g[train])),7)
-            self.assertEqual(len(set(g[inner])),6)
-            held_out.extend(test)
-        self.assertEqual(sorted(held_out),list(range(len(g))))
+    def test_rejects_missing_validation_class(self):
+        y,segments,assignment=self.frozen_split()
+        y[(assignment==1)&(y==11)]=10
+        with self.assertRaisesRegex(AssertionError,'cover all 12 classes'):
+            validate_split(y,segments,assignment)
 
     def test_long_gap_is_excluded(self):
         x=np.ones((180,2))

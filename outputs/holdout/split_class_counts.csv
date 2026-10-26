@@ -1,0 +1,13 @@
+﻿activity,total,train,test,cv_validation_1,cv_validation_2,cv_validation_3
+lying,742,538,204,181,174,183
+sitting,709,495,214,157,174,164
+standing,730,533,197,178,182,173
+walking,921,675,246,256,222,197
+running,376,265,111,88,95,82
+cycling,634,439,195,170,95,174
+Nordic walking,725,503,222,115,209,179
+ascending stairs,434,244,190,95,53,96
+descending stairs,384,251,133,91,93,67
+vacuum cleaning,673,486,187,159,165,162
+ironing,921,647,274,210,218,219
+rope jumping,161,111,50,29,49,33
