@@ -1,7 +1,7 @@
 {
   "protocol_version": 2,
   "unit_tests_passed": true,
-  "unit_test_log": "test_exact_ratio_and_training_only_cv (test_protocol.ProtocolTests.test_exact_ratio_and_training_only_cv) ... ok\ntest_features_are_sensor_local (test_protocol.ProtocolTests.test_features_are_sensor_local) ... ok\ntest_long_gap_is_excluded (test_protocol.ProtocolTests.test_long_gap_is_excluded) ... ok\ntest_network_shapes_and_gradients (test_protocol.ProtocolTests.test_network_shapes_and_gradients) ... ok\ntest_normalization_uses_training_only (test_protocol.ProtocolTests.test_normalization_uses_training_only) ... ok\ntest_original_column_mapping (test_protocol.ProtocolTests.test_original_column_mapping) ... ok\ntest_rejects_missing_validation_class (test_protocol.ProtocolTests.test_rejects_missing_validation_class) ... ok\ntest_rejects_window_leakage (test_protocol.ProtocolTests.test_rejects_window_leakage) ... ok\n\n----------------------------------------------------------------------\nRan 8 tests in 0.125s\n\nOK\n",
+  "unit_test_log": "test_exact_ratio_and_training_only_cv (test_protocol.ProtocolTests.test_exact_ratio_and_training_only_cv) ... ok\ntest_features_are_sensor_local (test_protocol.ProtocolTests.test_features_are_sensor_local) ... ok\ntest_long_gap_is_excluded (test_protocol.ProtocolTests.test_long_gap_is_excluded) ... ok\ntest_network_shapes_and_gradients (test_protocol.ProtocolTests.test_network_shapes_and_gradients) ... ok\ntest_normalization_uses_training_only (test_protocol.ProtocolTests.test_normalization_uses_training_only) ... ok\ntest_original_column_mapping (test_protocol.ProtocolTests.test_original_column_mapping) ... ok\ntest_rejects_missing_validation_class (test_protocol.ProtocolTests.test_rejects_missing_validation_class) ... ok\ntest_rejects_window_leakage (test_protocol.ProtocolTests.test_rejects_window_leakage) ... ok\n\n----------------------------------------------------------------------\nRan 8 tests in 0.190s\n\nOK\n",
   "saved_models_verified": 40,
   "model_replays": [
     {
@@ -249,7 +249,7 @@
   "paper_sources_and_figures_verified": true,
   "source_hashes": {
     "src/pamap2/__init__.py": "29bfbf66400523cdb6df83b07da04c793b19bf1fb6d929f07ee8c77effce0959",
-    "src/pamap2/analysis_holdout.py": "4a407123368771384e99ea1d60883a9b5beb1976402892c1d9623df08a3ebc73",
+    "src/pamap2/analysis_holdout.py": "2683e532b46a3317c0ea3b89dd2abd71b6d13564ef0d4274a21a6e7aa75d0e0f",
     "src/pamap2/analyze.py": "d4089b3114327e9be24c0bf88dd6da98cc0c01fa529849e87249dc299ee0aed8",
     "src/pamap2/common.py": "9b8346c7009fdc78e88a32a55c3dba2b16914a85b552712fcd445752e30c0768",
     "src/pamap2/deployment.py": "7026655f3fe89ff4697d03a86b1425e22ebf9bf9412874a308acba9f5d9d115e",
@@ -260,10 +260,10 @@
     "src/pamap2/models.py": "9f1b1902dc1d33107521103417a173b0f169d0f9fa62fd622eda00f19609a98d",
     "src/pamap2/prepare.py": "0c8f0f6b5d42f46dcd320e3b08c8a9155dd80123f28aa7c6b09c4732cdca7267",
     "src/pamap2/protocol.py": "2261afd5cc5c7c0f968c69ce5634f1cc1d17c692e44da4e3d9bd9727ba9c59bc",
-    "src/pamap2/report_holdout.py": "03dea73c41383c895c99d68c8d80b160c8583f61fd5fae8ee4d9fcc216b131e7",
+    "src/pamap2/report_holdout.py": "9129efe01bf3a380541b1955c621a5cd2e1cea4a8f4f7f649689803100e34dcd",
     "src/pamap2/verification_holdout.py": "6318bee1977e53ffc92750fddf720caa49454507944f08090e676dca324fd508"
   },
   "config_sha256": "e9c445344e79aefc395082e2000ffae5ef6702ccb104f900c3411a50df9ebb63",
   "split_sha256": "0421fd844f0eef3129c0daf0593f15615d0b16b4bb2e635f4d7535317db7b320",
-  "paper_pdf_sha256": "0bda605db4e9b18068ad37b26ef1728979468d707c16d1b8fca85ab0e4117a56"
+  "paper_pdf_sha256": "01319f08f13bd06f42ceb73414d82bf99efaaec5486496d33abcc778bbdef1cd"
 }

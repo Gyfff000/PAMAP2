@@ -29,10 +29,10 @@
     "outputs/holdout/environment.json": "5a77e7be4b8f5267bf954d30fdf059f69b736c37cdec19cf1f1cd96a8caf6656"
   },
   "figures": {
-    "confusion_matrices.pdf": "5e54ae5e40dba815ce9f212ae70c84857edbae48086d61e1080794bc11d58ef3",
-    "data_coverage.pdf": "feba7a51b4507ccf704fdde62661ba2add441be2a9c47ef2ce514b9757cbc061",
-    "model_comparison.pdf": "75371e8bbb1ee59ef8d466b988067e3379518cb7eb76e27cd80e74385e8f8f4c",
-    "sensor_ablation.pdf": "f3132748d67d4b36a5f440acc956edf8d5753d14a8bfb9e46bb3f9f5338a10e7",
-    "subject_generalization.pdf": "4dafff21bb4aa6dac651a92445a49a7d24a3570780a2038049045f0e1308e5c9"
+    "confusion_matrices.pdf": "fbb75ee7b08549e40dc333e4b8822a6d73ec31e8f5bca953da21576e9f4f5ec4",
+    "data_coverage.pdf": "bed2acbabbaf63e1581bf0da552e87f884d2fe72ef43aa2c89342d770281b956",
+    "model_comparison.pdf": "fa3fdb70de0cd6ddff24e7f411de377a0bdb21e5a2174b0d0db271624627c70e",
+    "sensor_ablation.pdf": "385d863e78f607ea2cbbd48ef968d25a43cca78761a1effe8f258c8cc9f29b10",
+    "subject_generalization.pdf": "7dc6c9f2aa2a1d5bc864ebab0aeabad8de14e67efc31ee6c69a3900c585404ec"
   }
 }

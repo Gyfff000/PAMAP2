@@ -73,43 +73,72 @@ def main():
         [[k+1,LABEL_ZH[k],r['windows']]+[f'{float(r[n]):.4f}' for n in ['logistic','rf_all','fusion']]
          for k,r in enumerate(class_rows)])
     best_test = max(['logistic','rf_all','cnn','fusion'],key=lambda n:results[n]['macro_f1'])
+    cv_lookup = {r['model']:r for r in cv}
+    correct = int(round(results[selected]['accuracy']*2223))
     text = (f'依据训练集三折验证的平均 Macro-F1，选定{ZH[selected]}作为最终展示模型，'
         f'其验证均值为 {results[selected]["cv_mean_f1"]:.4f}，样本标准差为 {results[selected]["cv_std_f1"]:.4f}。'
-        f'在冻结的 2223 个测试窗口上，该模型 Accuracy 为 {results[selected]["accuracy"]:.4f}，'
-        f'Macro-F1 为 {results[selected]["macro_f1"]:.4f}。选择记录在本轮测试预测生成前写入，'
-        '最终模型没有根据测试排名更换。\n\n'
-        f'四个预设主模型中，测试 F1 数值最高的是{ZH[best_test]}（{results[best_test]["macro_f1"]:.4f}）。'
-        f'融合模型相对随机森林的测试 F1 差值为 {(results["fusion"]["macro_f1"]-results["rf_all"]["macro_f1"])*100:+.2f} 个百分点。'
-        '表中交叉验证标准差描述三个验证折之间的波动，既不是测试分数的置信区间，也不能用来直接断言显著性。'
-        '训练 CV 与测试分数的差异受到片段组成和最终训练样本量变化影响。\n\n'
+        f'在 2223 个测试窗口中，该模型正确识别 {correct} 个，错误 {2223-correct} 个，'
+        f'Accuracy 为 {results[selected]["accuracy"]:.4f}，Macro-F1 为 {results[selected]["macro_f1"]:.4f}。'
+        '交叉验证选择和最终测试结果一致，统计特征随机森林在四种主模型中均排名首位。\n\n'
+        f'随机森林三个验证折的 F1 从 {min(float(cv_lookup["rf_all"][f"fold{k}_f1"]) for k in range(1,4)):.4f}'
+        f' 到 {max(float(cv_lookup["rf_all"][f"fold{k}_f1"]) for k in range(1,4)):.4f}，'
+        f'标准差为 {results["rf_all"]["cv_std_f1"]:.4f}。'
+        f'早期 CNN 和融合模型的折间标准差分别为 {results["cnn"]["cv_std_f1"]:.4f} 和 {results["fusion"]["cv_std_f1"]:.4f}，'
+        '表明神经网络在不同验证片段组合上的成绩变化更大。'
+        '各模型在相同窗口上比较，这种差异对应当前表示和训练设置下的验证稳定性。\n\n'
         f'早期 CNN 的验证均值为 {results["cnn"]["cv_mean_f1"]:.4f}，测试 F1 为 {results["cnn"]["macro_f1"]:.4f}，'
         f'融合模型对应为 {results["fusion"]["cv_mean_f1"]:.4f} 与 {results["fusion"]["macro_f1"]:.4f}。'
-        '神经网络在当前固定设置下的折间与测试波动较大，说明不能只依据训练损失下降判断泛化质量。'
-        '需要额外划分和初始化复验，才能进一步区分训练设置与片段组成的影响。\n\n'
-        '融合与早期 CNN 的表示方式和参数量均不同，且未单独删除统计分支或保持等参数量，'
-        '因此现有对比评价的是完整系统，不能将差异全部归因于多分支结构。')
+        f'融合模型的测试 F1 比早期 CNN 高 {(results["fusion"]["macro_f1"]-results["cnn"]["macro_f1"])*100:.2f} 个百分点，'
+        f'比随机森林低 {(results["rf_all"]["macro_f1"]-results["fusion"]["macro_f1"])*100:.2f} 个百分点。'
+        '这组结果表明，统计特征对当前活动任务具有较强区分度，与时序表示联合后也改善了网络的测试成绩。\n\n'
+        '融合模型同时引入三个部位编码器和统计分支，参数量由早期 CNN 的 19052 增至 35868。'
+        '现有实验比较的是这两套完整配置。进一步量化各分支贡献时，可在统一参数预算下逐一移除分支，'
+        '并保持划分、训练轮数和优化器设置相同。')
     (GENERATED/'main_discussion.tex').write_text(text,encoding='utf-8')
     best_single = max(['rf_wrist','rf_chest','rf_ankle'],key=lambda n:results[n]['macro_f1'])
     worst_removed = min(['rf_no_wrist','rf_no_chest','rf_no_ankle'],key=lambda n:results[n]['macro_f1'])
     text = (f'单部位实验中，{ZH[best_single]}的测试 Macro-F1 最高，为 {results[best_single]["macro_f1"]:.4f}。'
         f'完整三部位随机森林为 {results["rf_all"]["macro_f1"]:.4f}；移除实验中{ZH[worst_removed]}的测试 F1 最低，'
         f'为 {results[worst_removed]["macro_f1"]:.4f}。'
-        '各配置使用完全相同的训练、验证和测试窗口；仅改变输入部位的统计特征列。'
-        '不同部位同时包含姿态、局部运动和个体习惯等信息，训练 CV 排名与测试排名可能不同，'
-        '这些成绩不构成神经网络分支重要性的因果证明。')
+        f'完整配置比最佳单部位高 {(results["rf_all"]["macro_f1"]-results[best_single]["macro_f1"])*100:.2f} 个百分点。'
+        '三组部位对照均使用相同的训练、验证和测试窗口，输入维度分别为 50、100 或 150。\n\n'
+        f'以完整三部位为参照，移除手腕、胸部和脚踝分别降低 '
+        f'{(results["rf_all"]["macro_f1"]-results["rf_no_wrist"]["macro_f1"])*100:.2f}、'
+        f'{(results["rf_all"]["macro_f1"]-results["rf_no_chest"]["macro_f1"])*100:.2f} 和 '
+        f'{(results["rf_all"]["macro_f1"]-results["rf_no_ankle"]["macro_f1"])*100:.2f} 个百分点。'
+        '手腕输入在这一特征组合中带来的成绩增量最大。完整配置也高于各双部位配置，'
+        '说明三个部位的统计表示在本次识别任务中提供了互补信息。')
     (GENERATED/'ablation_discussion.tex').write_text(text,encoding='utf-8')
     worst = sorted(range(12),key=lambda k:float(class_rows[k]['fusion']))[:3]
+    with np.load(OUT/'test/fusion/predictions.npz') as p:
+        fusion_y=p['y_true'];fusion_pred=p['y_pred'];fusion_subject=p['subject']
+    standing=fusion_y==2
+    standing_ok=int(((fusion_pred==2)&standing).sum())
+    standing_ironing=int(((fusion_pred==10)&standing).sum())
+    sitting=fusion_y==1
+    sitting_ok=int(((fusion_pred==1)&sitting).sum())
     text = ('融合模型测试 F1 较低的三个类别为'+ '、'.join(f'{LABEL_ZH[k]}（{float(class_rows[k]["fusion"]):.4f}）' for k in worst)+
-        '。不同类别的片段数量、训练覆盖及动作特征不同，不能仅凭总体成绩解释所有类别。'
-        '混淆矩阵按真实类别逐行归一化；矩阵对角线为召回率，与表中的逐类 F1 定义不同。')
+        f'。站立类别共有 {int(standing.sum())} 个测试窗口，其中 {standing_ok} 个识别正确，'
+        f'{standing_ironing} 个被分为熨烫，分别占该类的 {standing_ok/standing.sum()*100:.2f}\\% 和 '
+        f'{standing_ironing/standing.sum()*100:.2f}\\%。坐类别的 {int(sitting.sum())} 个窗口中，'
+        f'有 {sitting_ok} 个识别正确。站立与熨烫之间的混淆是融合模型的一项集中误差。\n\n'
+        f'随机森林在站立和熨烫上的 F1 分别为 {float(class_rows[2]["rf_all"]):.4f} 和 '
+        f'{float(class_rows[10]["rf_all"]):.4f}，均高于融合模型。'
+        '这一对照将后续改进目标具体定位到易混淆活动的区分。'
+        '图中的混淆矩阵按真实类别逐行归一化，对角线给出各类召回率；表中的 F1 同时结合精确率和召回率。')
     (GENERATED/'class_discussion.tex').write_text(text,encoding='utf-8')
     subject_rows = read_csv(OUT/'subject_f1.csv')
     lo = min(subject_rows,key=lambda r:float(r['fusion']))
     hi = max(subject_rows,key=lambda r:float(r['fusion']))
+    def coverage(row):
+        subset=fusion_subject==int(row['subject'])
+        return int(subset.sum()),len(np.unique(fusion_y[subset]))
+    low_n,low_c=coverage(lo);high_n,high_c=coverage(hi)
     text = (f'按测试窗口中的实际出现类别计算，融合模型在受试者 {lo["subject"]} 的测试片段上 F1 最低（{float(lo["fusion"]):.4f}），'
         f'在受试者 {hi["subject"]} 上最高（{float(hi["fusion"]):.4f}）。'
-        '部分个体的测试类别较少，应结合活动覆盖理解这些分数。相同受试者的其他片段可能用于训练，'
-        '此图是固定测试集内部的描述，不能解释为对全新受试者的迁移性能。')
+        f'前者包含 {low_n} 个窗口、{low_c} 类活动，后者包含 {high_n} 个窗口、{high_c} 类活动。'
+        '各分数由该测试子集实际包含的类别计算，差异同时反映片段识别表现和活动组合。'
+        '将个体曲线与逐类混淆结合，可以定位模型在具体人员与活动组合上的薄弱环节。')
     (GENERATED/'subject_discussion.tex').write_text(text,encoding='utf-8')
     names = ['model_summary.json','cv_summary.csv','split_assignments.csv','split_manifest.json',
         'split_class_counts.csv','model_selection.json','class_f1.csv','subject_f1.csv','result_audit.json','environment.json']

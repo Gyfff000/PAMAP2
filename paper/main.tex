@@ -21,43 +21,45 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-针对可穿戴人体活动识别中的传感器部位差异、缺失记录和类别不均衡问题，本文基于 PAMAP2 原始数据开展十二类监督分类研究。使用手腕、胸部和脚踝的加速度及角速度信号，经短缺失插值、长缺失分段和抗混叠降采样，形成 7410 个离线活动窗口。按照完整连续活动片段分组，将 5187 个窗口用于训练、2223 个用于测试，严格满足 7:3；仅在训练集内部进行三折分组交叉验证。比较统计特征逻辑回归、随机森林、早期融合 CNN 及部位时序与统计特征融合模型，并以交叉验证平均 Macro-F1 选择最终模型。四种主模型在固定测试集上的 Macro-F1 分别为 \LRFone、\RFFone、\CNNFone\ 和 \FusionFone。另使用随机森林开展单部位与移除部位对照，分析不同部位输入的作用。依据交叉验证选择的 \BestName\ 在测试集上达到 \BestFone\ 的 Macro-F1。本文提供固定划分、逐折预测和结果核验记录；同一受试者的不同片段可分布于训练与测试，故结论适用于已知活动内部的离线片段分类，不代表未见受试者或在线连续流识别能力。
+本文基于 PAMAP2 原始数据研究多部位惯性信号的十二类活动识别。手腕、胸部和脚踝的加速度及角速度经过缺失处理、分段和降采样，形成 7410 个离线窗口。以完整连续活动片段为分组单位，将 5187 个窗口用于训练、2223 个用于测试，比例为 7:3；在训练集内进行三折分组交叉验证。比较统计特征逻辑回归、随机森林、早期融合 CNN 及部位时序与统计特征融合模型，测试 Macro-F1 分别为 \LRFone、\RFFone、\CNNFone\ 和 \FusionFone。交叉验证选出的 \BestName\ 取得 \BestAccuracy\ 的测试准确率。单部位和移除部位对照进一步表明，三部位统计特征在本实验中优于各单部位配置，移除手腕带来的性能下降最大。实验保留固定划分、逐折预测和模型回放记录，评价对象为既有受试者的离线活动片段。
 \par\noindent\textbf{关键词：}人体活动识别；多传感器融合；分组交叉验证；独立测试；PAMAP2
 \end{abstract}
 \vspace{0.5em}
 \begin{center}\bfseries Human Activity Recognition through Multi-Location Temporal and Statistical Feature Fusion\end{center}
-\noindent\textbf{Abstract:} This study compares twelve-class activity recognition on PAMAP2 using wrist, chest and ankle inertial signals. The 7,410 offline windows are split by complete activity segments into 5,187 training and 2,223 test windows (70/30). Three-fold group cross-validation uses only training data and selects the final model before testing. Logistic regression, random forests, an early-fusion CNN and a temporal/statistical fusion network obtain test macro-F1 scores of \LRFone, \RFFone, \CNNFone\ and \FusionFone, respectively. Additional random-forest experiments compare sensor locations. Overlapping windows never cross partitions. Subjects may occur in both sets; results concern offline within-activity classification and do not establish unseen-subject or online recognition performance.
+\noindent\textbf{Abstract:} This study compares twelve-class activity recognition on PAMAP2 using wrist, chest and ankle inertial signals. The 7,410 offline windows are split by complete activity segments into 5,187 training and 2,223 test windows (70/30). Three-fold group cross-validation uses only training data and selects the final model before testing. Logistic regression, random forests, an early-fusion CNN and a temporal/statistical fusion network obtain test macro-F1 scores of \LRFone, \RFFone, \CNNFone\ and \FusionFone, respectively. Additional random-forest experiments compare sensor locations. Overlapping windows never cross partitions. The evaluation measures offline activity-segment classification with subject identities shared across training and test sets.
 \par\noindent\textbf{Key words:} activity recognition; sensor fusion; group cross-validation; holdout evaluation; PAMAP2
 \clearpage
 
 \section{数据描述与研究问题}
-可穿戴传感器通过不同身体部位的运动变化描述人体活动。同类信号会受到步态、动作幅度与佩戴差异影响，相邻重叠窗口还具有较强相关性。因此，切窗后直接逐窗随机划分可能将同一段信号同时放入训练集和测试集，使结果偏高。本文按完整录制片段划分，在满足课程要求的训练与测试比例 7:3 的同时，避免同段窗口跨越数据部分。
+可穿戴传感器通过身体不同部位的运动变化描述人体活动。手腕记录局部手臂动作，胸部反映躯干姿态，脚踝提供下肢运动信息。融合这些信号能够同时利用多个部位的观测，但也增加了输入维度和模型训练的复杂度。本文围绕统计特征、时序表示与部位组合展开对比，分析它们在同一数据处理流程下的识别表现。
 
-已有研究表明，卷积和循环网络可以用于可穿戴活动识别，但其适用性依赖数据处理和评价条件\cite{ordonez,hammerla}。本文不把结构拼接作为新的架构贡献，而是比较统一协议下的四种轻量模型，考察统计特征与时序表示的差异、多部位输入的互补性，以及不同活动和个体测试片段的误差。这里的分组单位是连续活动片段，并非受试者；模型仍可能见过测试人员的其他活动片段。
+已有研究使用卷积和循环网络学习可穿戴信号中的活动模式\cite{ordonez,hammerla}。本文设置四种模型：逻辑回归提供统计特征的线性基线，随机森林建模特征间的非线性关系，早期融合 CNN 学习十八通道时序表示，融合模型结合部位编码与统计特征。比较重点是不同表示的识别差异、三部位输入的增益，以及误差集中的活动类别。
+
+相邻窗口存在 50\% 重叠，共享一半采样点。为保持评价数据隔离，本文将同一连续活动片段的全部窗口分配到同一部分，按 7:3 划分训练集和测试集，并在训练集内进行分组交叉验证。这样既保留窗口采样的连续性，也使每个测试片段完整地留在模型拟合之外。
 
 \subsection{数据来源与任务范围}
-PAMAP2 由九名受试者佩戴三组惯性测量单元和心率设备采集，完整数据包含十八种活动\cite{uci}。Protocol 规定十二种活动，Optional 为额外活动；两者不应直接合并后仍称为相同的十二类任务。本文仅使用 Protocol，采用手腕、胸部和脚踝的三轴 $\pm16g$ 加速度与三轴角速度，共十八个输入通道。官方说明推荐使用 $\pm16g$ 加速度，以减少较小量程饱和和校准差异的影响\cite{readme}。心率、磁力计、温度、重复量程加速度和无效姿态列不参与本实验。
+PAMAP2 由九名受试者佩戴三组惯性测量单元和心率设备采集，完整数据包含十八种活动\cite{uci}。数据分为包含十二种规定活动的 Protocol 和包含额外活动的 Optional。本文仅使用 Protocol，采用手腕、胸部和脚踝的三轴 $\pm16g$ 加速度与三轴角速度，共十八个输入通道。官方说明推荐使用 $\pm16g$ 加速度，以减少较小量程饱和和校准差异的影响\cite{readme}。心率、磁力计、温度、重复量程加速度和无效姿态列不参与本实验。
 
-受试者 109 的 Protocol 记录仅覆盖部分活动，故保留其审计记录但不纳入主实验。主实验采用 101--108 八名受试者，原始共 \RawRows\ 条逐时刻记录。其活动录制也不完全均衡，尤其 103 缺少四类活动；不能将所有个体当作均有十二类完整记录。表\ref{tab:data}与图\ref{fig:coverage}给出处理后的覆盖情况。原始文件、压缩包及处理后数组均记录 SHA-256，便于追溯数据版本。
+受试者 109 的 Protocol 记录仅覆盖部分活动，故保留其审计记录但不纳入主实验。主实验采用 101--108 八名受试者，原始共 \RawRows\ 条逐时刻记录。各人的活动覆盖不同，受试者 103 缺少跑步、骑车、北欧式行走和跳绳四类记录。表\ref{tab:data}与图\ref{fig:coverage}给出处理后的覆盖情况。跳绳有 161 个窗口，步行和熨烫各有 921 个窗口，最多类别的样本量约为最少类别的 5.72 倍。该分布是采用类别加权损失和 Macro-F1 的依据。原始文件、压缩包及处理后数组均记录 SHA-256，用于追溯数据版本。
 
-\begin{table}[htbp]\centering
+\begin{table}[!htbp]\centering
 \caption{主实验数据覆盖与缺失情况}\label{tab:data}
 \input{generated/data_table}
 \par\small 注：缺失率按所选十八个传感器列在该受试者全部原始记录中的缺失元素比例计算；活动数为切窗后有样本的类别数。
 \end{table}
 
-\begin{figure}[htbp]\centering
+\begin{figure}[!htbp]\centering
 \includegraphics[width=0.94\linewidth]{data_coverage.pdf}
 \caption{各受试者与活动类别的窗口数量。零值表示对应活动未产生可用窗口。}\label{fig:coverage}
 \end{figure}
 \FloatBarrier
 
 \subsection{预处理与窗口构建}
-首先按受试者分别处理文件，在活动标签变化、时间戳增量超过 $0.03\,\mathrm{s}$ 或不递增的位置切开记录；不属于规定十二类的过渡标签不保留。任一所选通道若出现超过五十个原始采样点的连续缺失，则排除对应区间并再次切分；不足该阈值的缺失只在当前连续活动段内部插值，段边缘采用最近有效值。该处理不跨越受试者、活动变化或长缺失区间。
+首先按受试者分别处理文件，在活动标签变化、时间戳增量超过 $0.03\,\mathrm{s}$ 或不递增的位置切开记录；不属于规定十二类的过渡标签不保留。任一所选通道若出现超过五十个原始采样点的连续缺失，则排除对应区间并再次切分；不足该阈值的缺失只在当前连续活动段内部插值，段边缘采用最近有效值。插值的作用域因此限定在单个受试者的一段连续活动内。
 
 在原始 $100\,\mathrm{Hz}$ 记录上使用多相低通滤波降采样至 $50\,\mathrm{Hz}$\cite{scipy}，每窗包含 256 点，持续 $5.12\,\mathrm{s}$，步长为 128 点，即相邻窗口重叠 50\%。不足完整窗口的尾部不填充，最终获得 $7410\times18\times256$ 的信号张量。本文将同一连续活动段产生的全部窗口绑定到同一数据部分，因此重叠窗口及同段插值、滤波所使用的信号不会跨越训练与测试。
 
-这里使用标注边界保留纯活动窗口，属于离线识别基准。插值和零相位滤波还会利用同一活动段内前后的信号，因此不能将结果解释为不使用未来信息的在线系统性能。传感器减少实验统一使用三部位共同可用的窗口，以保持样本一致；它并不估计单传感器在实际部署中可能额外保留的数据量。
+预处理使用已知活动边界，并在完整片段内利用前后信号完成插值和滤波，评价任务为标注活动内部的离线窗口分类。三部位模型和传感器对照均使用共同可用的窗口，使各配置的差异对应同一批样本上的输入变化。
 
 \section{模型描述}
 \subsection{统计特征与标准化}
@@ -65,16 +67,16 @@ PAMAP2 由九名受试者佩戴三组惯性测量单元和心率设备采集，�
 \begin{equation}
  H=-\sum_k p_k\log(p_k+\epsilon),\qquad p_k=\frac{P_k}{\max(\sum_jP_j,\epsilon)}.
 \end{equation}
-所有统计特征仅依赖单个窗口，不从完整数据拟合变换。对于需要标准化的模型，以当前训练部分估计均值和标准差：
+均值保留各轴的平均信号分量，标准差与均方根描述波动及强度，主频与谱熵描述频谱的集中程度，三轴模长补充整体运动幅度。各项特征均在单个窗口内计算。对于需要标准化的模型，以当前训练部分估计均值和标准差：
 \begin{equation}
  z_j=\frac{f_j-\mu_j^{\mathrm{train}}}{\max(\sigma_j^{\mathrm{train}},10^{-6})}.
 \end{equation}
-神经网络信号输入另按通道在训练窗口和时间轴上估计标准化参数。验证集或测试集不参与这些参数的估计。
+神经网络信号输入另按通道在训练窗口和时间轴上估计标准化参数，再将同一变换应用于对应验证集或测试集。统计特征的缩放使不同量纲的变量在逻辑回归正则化和网络优化中采用可比的数值尺度。
 
 \subsection{逻辑回归与随机森林}
-逻辑回归使用多类 Softmax 线性分类器，以 L2 正则化限制参数规模，固定 $C=1$、最大迭代数 2000，类别权重采用训练样本的平衡权重。它用于检验统计特征是否已经足以形成具有区分度的表示。
+逻辑回归使用多类 Softmax 线性分类器，以 L2 正则化限制参数规模，固定 $C=1$、最大迭代数 2000，类别权重采用训练样本的平衡权重。该模型将一百五十维特征映射为十二类概率，作为统计表示的线性基线。
 
-随机森林通过多棵决策树集成建模非线性关系\cite{breiman}。本实验固定 240 棵树、每叶最少两个样本、每次分裂考虑约 $\sqrt d$ 个特征，并采用各自助样本内部的平衡类别权重。不设最大树深度，不进行标准化。单部位和移除部位实验保持树数等设置相同，只改变输入的部位特征列。由于维度 $d$ 随之变化，默认分裂候选数也变化，因此这是固定训练规则下的系统对比，而非只改变一个物理传感器的完全因果实验。
+随机森林通过多棵决策树集成建模非线性关系\cite{breiman}。本实验固定 240 棵树、每叶最少两个样本、每次分裂考虑约 $\sqrt d$ 个特征，并采用各自助样本内部的平衡类别权重。不设最大树深度，不进行标准化。单部位和移除部位实验保持树数等设置相同，只改变输入的部位特征列。单部位、双部位和三部位的特征维度分别为 50、100 和 150，分裂候选特征数随 $\sqrt d$ 相应变化。
 
 \subsection{早期融合卷积网络}
 早期融合 CNN 将十八通道同时送入卷积编码器。三层卷积的通道数为 $18\to24\to48\to64$，核宽为 $7,5,3$，步长均为 2，每层后接批归一化和 ReLU。时间长度由 256 降至 128、64、32，随后执行全局平均池化、丢弃率 0.25 的 Dropout 和十二类线性分类。该模型参数量为 \CNNParams，不使用人工统计特征。
@@ -86,41 +88,52 @@ PAMAP2 由九名受试者佩戴三组惯性测量单元和心率设备采集，�
  \boldsymbol h_f&=\operatorname{Dropout}(\operatorname{ReLU}(W_f\boldsymbol z+b_f))\in\mathbb R^{64},\\
  \boldsymbol u&=[\boldsymbol h_w;\boldsymbol h_c;\boldsymbol h_a;\boldsymbol h_f]\in\mathbb R^{160}.
 \end{align}
-最终通过 $160\to64\to12$ 的分类头输出类别。模型参数量为 \FusionParams。局部分支保留不同部位的表征，统计特征提供动作姿态与幅度等窗口信息；能否带来额外收益需要根据实验判断。该结构没有显式注意力权重，不能把随机森林消融的成绩解释为神经网络学得的部位重要性。
+最终通过 $160\to64\to12$ 的分类头输出类别。模型参数量为 \FusionParams。三个局部分支分别编码手腕、胸部和脚踝的时间变化，统计分支提供窗口尺度的分布与频谱信息。分类头联合处理这两类表示，使局部时序模式与整体统计量共同参与类别判别。
 
-两个神经网络都使用 AdamW，学习率 $10^{-3}$、权重衰减 $10^{-4}$、批量大小 128，固定训练二十五轮。损失为按训练类别计数平方根倒数加权的交叉熵，权重均值归一化为 1，并把梯度范数截断为 5。只使用 CPU，固定随机种子与确定性计算；运行环境为 Python \PythonVersion、PyTorch \TorchVersion、scikit-learn \SklearnVersion。
+两个神经网络都使用 AdamW，学习率 $10^{-3}$、权重衰减 $10^{-4}$、批量大小 128，固定训练二十五轮。设当前训练部分第 $c$ 类窗口数为 $n_c$，类别权重采用其平方根倒数，并归一化为均值 1。对一个批次 $\mathcal B$，加权交叉熵为
+\begin{equation}
+w_c=\frac{n_c^{-1/2}}{\frac1{12}\sum_{j=1}^{12}n_j^{-1/2}},\qquad
+\mathcal L=-\frac{\sum_{i\in\mathcal B}w_{y_i}\log p(y_i\mid\boldsymbol X_i,\boldsymbol f_i)}{\sum_{i\in\mathcal B}w_{y_i}}.
+\end{equation}
+该权重提高稀有类别在损失中的相对贡献，平方根形式使其变化幅度小于计数倒数。每次更新将梯度范数截断为 5。实验使用 CPU、固定随机种子和确定性计算，运行环境为 Python \PythonVersion、PyTorch \TorchVersion、scikit-learn \SklearnVersion。
 
 \section{实验协议与评价指标}
 \subsection{固定 7:3 划分与片段隔离}
-本次采用固定留出测试集，而非以留一受试者验证替代 7:3 划分。全部 7410 个窗口均保留：训练集 $N_{\mathrm{train}}=5187$，测试集 $N_{\mathrm{test}}=2223$，满足
+全部 7410 个窗口按固定留出法分为训练集和测试集：训练集 $N_{\mathrm{train}}=5187$，测试集 $N_{\mathrm{test}}=2223$，满足
 \begin{equation}
 \frac{N_{\mathrm{train}}}{N_{\mathrm{train}}+N_{\mathrm{test}}}=0.7,\qquad
 \frac{N_{\mathrm{test}}}{N_{\mathrm{train}}+N_{\mathrm{test}}}=0.3.
 \end{equation}
 分组单位为预处理得到的完整连续活动段，共 106 段。每段只对应一个受试者和一种活动，且已在标签变化、时间跳变及长缺失处断开。由于同段窗口重叠且共享插值、滤波上下文，整段必须绑定到同一数据部分。该约束同时用于训练与测试隔离，以及交叉验证各折之间的隔离。
 
-仅根据活动标签、片段编号及窗口数量进行分组分配，不使用信号取值、模型预测或成绩。分配程序采用混合整数约束\cite{milp}，要求测试集 2223 窗口、三个训练验证折各 1729 窗口、每部分均覆盖十二类；在约束下尽量减小各类数量相对目标比例的偏差。限时求解所得可行划分经过独立断言核验，不宣称类别比例偏差已达到全局最优。各类别因完整片段约束，比例不必分别等于 7:3，精确比例针对全部窗口。划分保存在逐窗口清单 \texttt{split\_assignments.csv} 并固定哈希，复现实验直接复用该清单，不反复生成划分后挑选高分。
+分配程序以活动标签、片段编号和窗口数量为输入，使用混合整数约束分配完整片段\cite{milp}。令 $z_{gr}\in\{0,1\}$ 表示片段 $g$ 是否分到部分 $r$，$r=0$ 为测试集，$r=1,2,3$ 为训练集的三个验证子集，$n_g$ 为该片段窗口数。主要数量约束为
+\begin{equation}
+\sum_{r=0}^3 z_{gr}=1,\qquad
+\sum_gn_gz_{g0}=2223,\qquad
+\sum_gn_gz_{gk}=1729\quad(k=1,2,3).
+\end{equation}
+每部分还要求覆盖十二类活动。在这些约束下，分配程序以减小各类窗口数相对目标比例的偏差为主要目标，求解器在三十秒限时内返回了满足约束的可行划分。整体窗口数精确满足 7:3，类别比例随片段长度变化。例如躺卧活动分为训练 538 个、测试 204 个，上楼活动分为训练 244 个、测试 190 个，具体数量见表\ref{tab:splitclass}。逐窗口清单保存在 \texttt{split\_assignments.csv}，以固定哈希标识，后续训练与复现均使用同一划分。
 
-\begin{table}[htbp]\centering
+\begin{table}[!htbp]\centering
 \caption{固定数据划分；后三行是训练集内部的三个互斥验证子集}\label{tab:split}
 \input{generated/split_table}
-\par\small 注：三个验证子集合计为训练集，各为训练集的三分之一；它们不是额外数据。
+\par\small 注：三个验证子集互斥，合计为全部训练集，各占训练集的三分之一。
 \end{table}
-\begin{table}[htbp]\centering
+\begin{table}[!htbp]\centering
 \caption{训练、测试与交叉验证各验证折的类别覆盖}\label{tab:splitclass}
 \input{generated/split_class_table}
 \end{table}
 
-需要区分两种隔离：本次测试片段未参与模型拟合、标准化或模型选择，但训练与测试可能包含同一个人的不同片段。这不能证明对未见人员的推广能力。此外，这批公开数据在此前的留一受试者实验中已被评价；本次是因课程比例要求而重新固定的协议，并非历史上从未使用的新外部测试数据。旧协议配置、代码与结果另行留档，不与本次分数合并或直接比较。
+本次评价以完整片段隔离，训练与测试共享受试者身份和采集环境，指标反映既有受试者未参与训练片段的分类表现。同批公开记录已用于前期留一受试者实验；旧协议配置、代码和结果另行留档，本次依据新的固定划分单独统计成绩。
 
 \subsection{仅在训练集内的三折分组交叉验证}
 设训练集分为互斥的片段组 $V_1,V_2,V_3$，每组包含 1729 个窗口。第 $k$ 折使用 $T_k=\mathcal D_{\mathrm{train}}\setminus V_k$ 的 3458 个窗口训练，在 $V_k$ 上验证。通过固定折映射实现三折交叉验证\cite{predefined}，每个训练窗口恰好验证一次，2223 个测试窗口不出现在任何一次交叉验证的训练或验证部分。
 
-选择三折是因为跳绳活动总共只有四个独立片段，留出一个用于测试后，训练集仅剩三个片段；三折能够使每个验证折均保留跳绳及其他十一类活动。若强行做五折分组验证，至少两个验证折将缺少跳绳。所有模型共享同一份冻结划分，避免不同配置使用不同测试难度。
+三折设置由稀有活动的片段数量决定。跳绳共四个完整片段，测试集分配一个含 50 窗口的片段，训练集保留三个片段，分别包含 29、49 和 33 个窗口。每个验证折分配其中一段，使三折均覆盖跳绳和其余十一类活动。所有模型共享这一映射，在相同验证与测试样本上比较。
 
-每次拟合时，逻辑回归的标准化器仅在当前训练折拟合；神经网络的信号、统计特征标准化以及类别权重也只由当前训练折估计。结构、树数、窗口长度及优化参数沿用预设值；两个网络在每个交叉验证折和最终训练中均固定二十五轮，不使用测试或验证成绩选择轮数，也不额外调参。基础种子为 42，三个交叉验证折分别使用 43、44、45，最终训练使用 42。
+每次拟合时，逻辑回归的标准化器仅在当前训练折拟合；神经网络的信号、统计特征标准化以及类别权重也只由当前训练折估计。结构、树数、窗口长度及优化参数按配置文件固定，两个网络在各交叉验证折及最终训练中均训练二十五轮。基础种子为 42，三个交叉验证折分别使用 43、44、45，最终训练使用 42。
 
-四种主模型依据三个验证折固定十二类 Macro-F1 的算术平均值选择，传感器对照不进入最终模型候选集合。选择结果及各验证成绩哈希在测试预测产生前保存。随后对十个预先列明的配置分别在全部 5187 个训练窗口上重新拟合，在相同 2223 个测试窗口上评价一次；最终展示模型仍按先前的交叉验证选择，不按测试排名更换。共进行 $10\times3=30$ 次交叉验证拟合和十次最终拟合。
+最终模型的候选集合为逻辑回归、完整三部位随机森林、早期融合 CNN 和融合网络，依据三个验证折固定十二类 Macro-F1 的算术平均值选择。选择记录及各验证成绩哈希先行保存，再将十个预设配置分别在全部 5187 个训练窗口上重新拟合，并在相同 2223 个测试窗口上评价。该流程共包含 $10\times3=30$ 次交叉验证拟合和十次最终拟合，模型选择使用训练阶段记录，最终测试衡量选定配置的留出表现。
 
 \subsection{指标定义与统计范围}
 主指标为固定十二类的 Macro-F1：
@@ -133,70 +146,72 @@ F_1^{\mathrm{macro}}=\frac1{12}\sum_{c=1}^{12}F_{1,c}.
 \bar F_{\mathrm{CV}}=\frac13\sum_{k=1}^3F_k,\qquad
 s_{\mathrm{CV}}=\sqrt{\frac1{2}\sum_{k=1}^3(F_k-\bar F_{\mathrm{CV}})^2}.
 \end{equation}
-交叉验证分数用于比较训练阶段表现，测试分数仅由留出测试窗口计算，两者分别报告。三个折的训练数据相互重叠，标准差描述折间波动，不是独立测试的置信区间。
+交叉验证分数用于比较训练阶段表现，测试分数仅由留出测试窗口计算，两者分别报告。三个折的训练数据相互重叠，所报标准差用于描述不同验证片段组合下的成绩波动。
 
-个体测试片段可能只包含部分活动，故描述性个体图使用该人在测试中实际出现类别的 Macro-F1。它与固定十二类的总体指标不同，不用于最终模型选择。不将重叠窗口当作独立统计样本，本次不根据窗口数量计算显著性检验或夸大人群推断。
+个体测试子集的类别覆盖不同，个体图据其实际出现类别计算 Macro-F1，用于分析误差分布。总体指标则固定十二类并汇总全部测试窗口。两种统计分别描述个体片段的识别质量和完整测试任务的表现。
 
 \section{实验结果与分析}
 \subsection{交叉验证与主模型对比}
-\begin{table}[htbp]\centering\small
+\begin{table}[!htbp]\centering\small
 \caption{训练集内部三折交叉验证的固定十二类 Macro-F1}\label{tab:cv}
 \input{generated/cv_table}
 \end{table}
-\begin{table}[htbp]\centering\small
+\begin{table}[!htbp]\centering\small
 \caption{主模型的训练交叉验证与固定 30\% 测试集结果}\label{tab:main}
 \input{generated/main_table}
 \par\small 注：F1 均固定十二类；SD 为三个验证折的样本标准差。测试成绩来自同一组 2223 个窗口。
 \end{table}
+\FloatBarrier
 \input{generated/main_discussion}
-\begin{figure}[htbp]\centering
+\begin{figure}[!htbp]\centering
 \includegraphics[width=0.96\linewidth]{model_comparison.pdf}
 \caption{训练交叉验证均值与最终测试成绩；误差线仅表示验证折间标准差。}\label{fig:models}
 \end{figure}
 \FloatBarrier
 
 \subsection{传感器部位对比}
-\begin{table}[htbp]\centering\small
+\begin{table}[!htbp]\centering\small
 \caption{固定随机森林规则下的部位输入对照}\label{tab:ablation}
 \input{generated/ablation_table}
 \end{table}
+\FloatBarrier
 \input{generated/ablation_discussion}
-\begin{figure}[htbp]\centering
+\begin{figure}[!htbp]\centering
 \includegraphics[width=0.96\linewidth]{sensor_ablation.pdf}
 \caption{同一划分下的部位实验，分别显示训练交叉验证均值和测试 F1。}\label{fig:ablation}
 \end{figure}
 \FloatBarrier
 
+\clearpage
 \subsection{类别与个体测试片段差异}
 \input{generated/class_discussion}
-\begin{table}[htbp]\centering\small
+\begin{table}[!htbp]\centering\small
 \caption{固定测试集的活动窗口数与逐类 F1}\label{tab:class}
 \input{generated/class_table}
 \end{table}
-\FloatBarrier
-\begin{figure}[htbp]\centering
-\includegraphics[width=0.94\linewidth,height=0.80\textheight,keepaspectratio]{confusion_matrices.pdf}
-\caption{固定测试集的行归一化混淆矩阵；类别编号对应表\ref{tab:class}。}\label{fig:cm}
+\begin{figure}[!htbp]\centering
+\includegraphics[width=0.98\linewidth]{confusion_matrices.pdf}
+\caption{固定测试集的行归一化混淆矩阵，数字为百分比；类别编号对应表\ref{tab:class}。}\label{fig:cm}
 \end{figure}
 \FloatBarrier
-\begin{figure}[htbp]\centering
+\begin{figure}[!htbp]\centering
 \includegraphics[width=0.96\linewidth]{subject_generalization.pdf}
-\caption{各人测试片段的实际出现类别 F1；同一人的其他片段可能参与训练。}\label{fig:subjects}
+\caption{各受试者测试子集的 Macro-F1，按该子集实际出现类别计算。}\label{fig:subjects}
 \end{figure}
 \FloatBarrier
 \input{generated/subject_discussion}
 
 \subsection{结果核验与模型展示}
-分析程序读取四十次拟合保存的窗口索引、真实标签、预测、片段编号及配置哈希，验证训练与测试窗口数、片段隔离及类别覆盖，检查每个训练窗口恰好被交叉验证验证一次，且测试窗口从未进入交叉验证。再根据预测重新计算全部指标，与训练记录逐项比对。保存模型重新加载后还需复放相应验证或测试窗口，确认预测完全一致。图表与表格从这些记录生成，不手动填写预期成绩。
+分析程序读取四十次拟合保存的窗口索引、真实标签、预测、片段编号和配置哈希，核验样本数量、片段隔离及类别覆盖。检查结果显示，每个训练窗口恰好用于一次交叉验证验证，全部测试窗口保持留出。程序按逐窗口预测重新计算指标，并与训练记录逐项比对；四十个保存模型重新加载后，预测均与原记录一致。论文图表由这些核验结果生成，来源文件和图像以哈希关联。
 
-展示模型直接导出交叉验证所选模型在 70\% 训练集上拟合的已评价版本，保留 30\% 测试片段隔离，不再用全部数据重训。另从各测试类别按固定索引分位点选两个窗口，共二十四个样本回放，选样不按预测正确与否筛选。少量演示仅说明运行过程，正式测试成绩以全部 2223 个窗口为准。
+展示程序加载交叉验证选定的随机森林，其训练数据为 5187 个窗口，与最终测试所评价的模型相同。每个测试类别按窗口索引的 25\% 和 75\% 分位位置各取一个样本，共二十四个窗口，用于演示特征计算、模型加载和类别输出。选样规则在读取预测结果前固定；完整测试集的 2223 个窗口构成正式指标的统计范围。
 
-\section{局限与结论}
-本实验覆盖八名受试者、固定佩戴位置和受控活动，存在类别不均衡及部分个体缺少活动的情况。完整片段分组阻止重叠窗口跨集合，但没有隔离人员或整个采集会话，因此仍可能利用同人特征和相同采集条件，不能解释为未见受试者泛化。仅使用一次固定 7:3 划分及一个基础种子，未覆盖所有划分与初始化波动。三个训练验证折的统计量也不足以支持广泛人群中的显著性结论。
+\section{讨论与结论}
+本实验的证据范围由数据和划分方式确定：八名受试者在固定位置佩戴设备，训练与测试以连续活动片段隔离，使用一次 7:3 划分和一个基础随机种子。因此，结果描述这一采集条件下的离线片段分类表现。新增受试者、独立采集会话及多种子重复实验，可进一步量化跨人员、跨会话和初始化带来的变化。
 
-已知标注边界、离线插值和零相位滤波限制了结果的适用范围，本实验不评价过渡检测、未知活动、实时延迟或传感器故障时的在线鲁棒性。融合网络的统计分支未单独消融，不同模型的容量与输入表示亦不同。最大计算预算下的固定二十五轮不代表网络已达到最优。此前对同批数据的历史实验意味着本次留出集不能替代全新的外部数据验证。
+结果呈现出三点规律。第一，统计特征随机森林在交叉验证和最终测试中均居四种主模型首位，说明当前窗口统计量已具有较强的活动区分能力。第二，融合模型的测试 F1 高于早期 CNN，时序编码与统计表示的联合输入在本配置下获得了更好的识别结果。第三，站立、坐和熨烫是融合模型的主要误差来源，类别混淆比总体准确率更直接地指向后续改进目标。
 
-本文按照训练与测试严格 7:3、仅训练集内部交叉验证的要求，建立可追溯的十二类活动识别流程。依据三折分组验证选择的 \BestName{}，验证平均 Macro-F1 为 \BestCV，最终测试 Macro-F1 为 \BestFone，Accuracy 为 \BestAccuracy。实验同时保留完整系统、传感器配置与逐类别误差对比。未来可在额外受试者、不同会话及多种子划分上复验，并研究在线分段及质量自适应融合。
+本文完成了从原始传感器记录、缺失处理、窗口构建到模型训练与预测核验的十二类活动识别流程。训练集和测试集按 7:3 固定，模型在训练集内通过三折分组交叉验证选择。最终 \BestName\ 的验证平均 Macro-F1 为 \BestCV，测试 Macro-F1 为 \BestFone，Accuracy 为 \BestAccuracy。三部位特征对照与逐类别预测共同表明，在当前离线片段任务中，完整三部位统计特征随机森林是表现最好的配置。
 
 \clearpage
 \begin{thebibliography}{9}

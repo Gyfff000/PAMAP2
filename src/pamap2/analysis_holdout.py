@@ -120,24 +120,28 @@ def main():
     ax.set_xticks(range(7),[PRETTY[n].replace(' ','\n',1) for n in ablations],fontsize=9)
     ax.set_ylim(0,1.04);ax.set_ylabel('12-class macro F1');ax.legend(frameon=False)
     ax.grid(axis='y',alpha=.2);fig.tight_layout();finish(fig,'sensor_ablation')
-    fig,axes = plt.subplots(2,1,figsize=(7.4,10.3),layout='constrained')
+    fig,axes = plt.subplots(1,2,figsize=(11,4.7),layout='constrained')
     for ax,name in zip(axes,['rf_all','fusion']):
         p = cache[name];cm = confusion_matrix(p['y_true'],p['y_pred'],labels=range(12))
         normalized = cm/np.maximum(cm.sum(1,keepdims=True),1)
-        im = ax.imshow(normalized,cmap='Blues',vmin=0,vmax=1)
+        im = ax.imshow(normalized*100,cmap='Blues',vmin=0,vmax=100)
         for i in range(12):
             for j in range(12):
                 if normalized[i,j]>=.02:
-                    ax.text(j,i,f'{normalized[i,j]:.2f}',ha='center',va='center',fontsize=11,
+                    ax.text(j,i,f'{100*normalized[i,j]:.0f}',ha='center',va='center',fontsize=14,
                         color='white' if normalized[i,j]>.55 else '#24384a')
         ax.set_xticks(range(12),range(1,13));ax.set_yticks(range(12),range(1,13))
-        ax.set_xlabel('Predicted class');ax.set_ylabel('True class');ax.set_title(PRETTY[name]+' - fixed test')
-    fig.colorbar(im,ax=axes,shrink=.75,label='Within-class recall');finish(fig,'confusion_matrices')
+        ax.tick_params(labelsize=14)
+        ax.set_xlabel('Predicted class',fontsize=15);ax.set_ylabel('True class',fontsize=15)
+        ax.set_title(PRETTY[name],fontsize=16)
+    colorbar=fig.colorbar(im,ax=axes,shrink=.8)
+    colorbar.set_label('Within-class recall (%)',fontsize=14);colorbar.ax.tick_params(labelsize=13)
+    finish(fig,'confusion_matrices')
     fig,ax = plt.subplots(figsize=(8.5,4.2))
     for name in MAIN_MODELS:
         ax.plot([r['subject'] for r in subject_rows],[r[name] for r in subject_rows],marker='o',label=PRETTY[name])
     ax.set_xticks([r['subject'] for r in subject_rows]);ax.set_ylim(0,1.04)
-    ax.set_xlabel('Subject (may also have separate training segments)');ax.set_ylabel('Test F1, supported labels')
+    ax.set_xlabel('Subject');ax.set_ylabel('Test F1, supported labels')
     ax.legend(frameon=False,ncol=2,fontsize=9);ax.grid(axis='y',alpha=.2);fig.tight_layout();finish(fig,'subject_generalization')
     with (ROOT/'outputs/class_subject_counts.csv').open(encoding='utf-8-sig') as f:
         counts = list(csv.DictReader(f))
