@@ -1,0 +1,6 @@
+# These files participate in SHA-256 provenance. Preserve their exact bytes
+# across Windows, Linux and raw GitHub downloads instead of converting newlines.
+/configs/experiment.json -text
+/src/pamap2/*.py -text
+/outputs/holdout/** -text
+/paper/asset_manifest.json -text
